@@ -27,12 +27,14 @@ class ProductController extends BaseController {
 
   RxBool isUpload = true.obs;
   RxString imageUrl = "".obs;
+  RxString productId = "".obs;
 
   @override
   void onInit() {
     clearController();
-    isEdit.value =Get.arguments['editProduct'];
-    imageUrl.value =Get.arguments['proImage'].toString();
+    isEdit.value = Get.arguments['editProduct'];
+    imageUrl.value = Get.arguments['proImage'].toString();
+    productId.value = Get.arguments['productId'].toString();
     nameController.text = Get.arguments['proName'].toString();
     priceController.text = Get.arguments['proPrice'].toString();
     selectedItem.value = Get.arguments['proCategory'].toString();
@@ -42,6 +44,7 @@ class ProductController extends BaseController {
     print(Get.arguments['proPrice']);
     print(Get.arguments['proCategory']);
     print(Get.arguments['proDescription']);
+    print("Product Id : ${productId.value}");
     super.onInit();
   }
 
@@ -52,7 +55,6 @@ class ProductController extends BaseController {
   }
 
   final currenUserId = FirebaseAuth.instance.currentUser!.uid;
-
 
   // Future updateProduct() async {
   //   final pid = FirebaseFirestore.instance.doc("product").id;
@@ -89,6 +91,8 @@ class ProductController extends BaseController {
         "imageUrl": imageUrl.value.toString(),
       }).then((value) {
         //uploadImage();
+        print("Added Product Value ${value.id}");
+        value.set({'id': value.id}, SetOptions(merge: true));
         showDialog(
           context: context,
           builder: (context) {

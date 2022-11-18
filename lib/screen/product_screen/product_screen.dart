@@ -58,7 +58,14 @@ class ProductScreen extends GetView<ProductController> {
                               child: ClipRRect(
                                   borderRadius:
                                       const BorderRadius.all(Radius.zero),
-                                  child: controller.pickedImage.value != null
+                                  child:
+                                  controller.isEdit.value == true ?
+                                  Image.network(
+                                    controller.imageUrl.toString(),
+                                    fit: BoxFit.fill,
+                                  )
+                                      :
+                                  controller.pickedImage.value != null
                                       ? Image.file(
                                           File(controller
                                               .pickedImage.value!.path),
