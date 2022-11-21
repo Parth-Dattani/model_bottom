@@ -281,6 +281,8 @@ class ProductScreen extends GetView<ProductController> {
 
                     ElevatedButton(
                       onPressed: () {
+                        controller.isEdit.value == true ?
+                            controller.updateProduct() :
                         controller.addProduct(context);
                       },
                       style: ElevatedButton.styleFrom(

@@ -56,30 +56,11 @@ class ProductController extends BaseController {
 
   final currenUserId = FirebaseAuth.instance.currentUser!.uid;
 
-  // Future updateProduct() async {
-  //   final pid = FirebaseFirestore.instance.doc("product").id;
-  //   final s = FirebaseFirestore.instance.collection('users').snapshots();
-  //   print(s.first);
-  //   print("Filesdfdsfdf $s.first");
-  //   loader.value = true;
-  //   productFormKey.currentState!.save();
-  //   if (productFormKey.currentState!.validate()) {
-  //     FirebaseFirestore.instance.collection("products").doc(id).update(
-  //          imageUrl.value.toString(),
-  //        nameController.text,
-  //       "description": descController.text,
-  //   "price": priceController.text,
-  //   "category": selectedItem.value.toString(),
-  //     );
-  //
-  //     Future.delayed(const Duration(seconds: 5), () {
-  //       Get.back();
-  //       loader.value = false;
-  //     });
-  //
-  //   }
-  // }
 
+
+
+
+  //add new product
   Future<void> addProduct(context) async {
     await uploadImage();
     if (productFormKey.currentState!.validate()) {
@@ -92,7 +73,7 @@ class ProductController extends BaseController {
       }).then((value) {
         //uploadImage();
         print("Added Product Value ${value.id}");
-        value.set({'id': value.id}, SetOptions(merge: true));
+        value.set({'productID': value.id}, SetOptions(merge: true));
         showDialog(
           context: context,
           builder: (context) {
@@ -111,6 +92,31 @@ class ProductController extends BaseController {
         });
       });
     }
+  }
+
+  //update product
+  Future updateProduct() async {
+    loader.value = true;
+    productFormKey.currentState!.save();
+    if (productFormKey.currentState!.validate()) {
+      FirebaseFirestore.instance.collection("products").doc(productId.value).update({
+        "product_name": nameController.text,
+        "description": descController.text,
+        "price": priceController.text,
+        "category": selectedItem.value.toString(),
+        "imageUrl": imageUrl.value.toString(),
+      });
+      Future.delayed(const Duration(seconds: 5), () {
+        Get.back();
+        loader.value = false;
+      });
+      print("Update data ");
+    }
+  }
+
+  //delete product
+  Future deleteProduct() async {
+    FirebaseFirestore.instance.collection("products").doc(productId.value).delete();
   }
 
   // Future selectFile()async{

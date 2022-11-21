@@ -77,6 +77,7 @@ class HomeScreen extends GetView<HomeController> {
                 onPressed: () {
                   Get.toNamed(ProductScreen.pageId, arguments: {
                     'editProduct': controller.isEdit.value = false,
+                    'deleteProduct': controller.isDelete.value = false,
                     'proImage': '',
                     'proName': '',
                     'proPrice': '',
@@ -376,53 +377,80 @@ class HomeScreen extends GetView<HomeController> {
                                           ? Positioned(
                                               right: -1,
                                               bottom: -4,
-                                              child: IconButton(
-                                                  onPressed: () {
-                                                    //DocumentReference doc_ref=FirebaseFirestore.instance.collection("products") as DocumentReference<Object?>;
-                                                    print("docccid :");
-                                                    getProduct[index]
-                                                        .reference
-                                                        .id;
-                                                    final s = FirebaseFirestore
-                                                        .instance
-                                                        .collection('products')
-                                                        .doc()
-                                                        .id;
-                                                    print(s);
-                                                    print("Filesdfdsfdf $s");
-                                                    Get.toNamed(
-                                                        ProductScreen.pageId,
-                                                        arguments: {
-                                                          'editProduct':
-                                                              controller.isEdit
-                                                                  .value = true,
-                                                          'productId':
-                                                              getProduct[index]
-                                                                  .get("id"),
-                                                          'proImage': getProduct[
-                                                                  index]
-                                                              .get("imageUrl"),
-                                                          'proName': getProduct[
-                                                                  index]
-                                                              .get(
-                                                                  "product_name"),
-                                                          'proPrice':
-                                                              getProduct[index]
-                                                                  .get("price"),
-                                                          'proCategory':
-                                                              getProduct[index]
+                                              child: Row(
+                                                children: [
+                                                  IconButton(
+                                                      onPressed: () {
+                                                        Get.toNamed(
+                                                            ProductScreen
+                                                                .pageId,
+                                                            arguments: {
+                                                              'editProduct':
+                                                                  controller
+                                                                          .isEdit
+                                                                          .value =
+                                                                      true,
+                                                              'productId':
+                                                                  getProduct[
+                                                                          index]
+                                                                      .get(
+                                                                          "productID"),
+                                                              'proImage':
+                                                                  getProduct[
+                                                                          index]
+                                                                      .get(
+                                                                          "imageUrl"),
+                                                              'proName': getProduct[
+                                                                      index]
                                                                   .get(
-                                                                      "category"),
-                                                          'proDescription':
-                                                              getProduct[index].get(
-                                                                  "description"),
-                                                        });
-                                                    //productView(context, getProduct[index]);
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.edit,
-                                                    color: Colors.green,
-                                                  )))
+                                                                      "product_name"),
+                                                              'proPrice':
+                                                                  getProduct[
+                                                                          index]
+                                                                      .get(
+                                                                          "price"),
+                                                              'proCategory':
+                                                                  getProduct[
+                                                                          index]
+                                                                      .get(
+                                                                          "category"),
+                                                              'proDescription':
+                                                                  getProduct[
+                                                                          index]
+                                                                      .get(
+                                                                          "description"),
+                                                            });
+                                                        //productView(context, getProduct[index]);
+                                                      },
+                                                      icon: const Icon(
+                                                        Icons.edit,
+                                                        color: Colors.green,
+                                                      )),
+                                                  IconButton(
+                                                      onPressed: () {
+                                                        FirebaseFirestore.instance.collection("products").doc(getProduct[index].get("productID")).delete();
+                                                        // showDialog(
+                                                        //   context: context,
+                                                        //   builder: (context) {
+                                                        //     return AlertDialog(
+                                                        //       title: Container(
+                                                        //           color: Colors
+                                                        //               .blue,
+                                                        //           child: const Text(
+                                                        //               "Flutter Product!!")),
+                                                        //       content: const Text(
+                                                        //           "Product delete ? "),
+                                                        //     );
+                                                        //   },
+                                                        // );
+                                                        //Get.toNamed(ProductScreen.pageId,);
+                                                      },
+                                                      icon: const Icon(
+                                                        Icons.delete,
+                                                        color: Colors.red,
+                                                      )),
+                                                ],
+                                              ))
                                           : const SizedBox(
                                               width: 0,
                                             ),
