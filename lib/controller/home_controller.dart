@@ -112,6 +112,18 @@ class HomeController extends BaseController {
     //usrCount = query.count;
     totalUsers.value = query.count.toString();
   }
+
+  Future deleteProduct(context, productIndex)async{
+    await FirebaseFirestore
+        .instance
+        .collection(
+        "products")
+        .doc(productIndex
+        .get("productID"))
+        .delete();
+    Get.back();
+  }
+
 }
 
 class SelectDrawer {
@@ -121,4 +133,6 @@ class SelectDrawer {
 
   SelectDrawer({this.title, this.icon, this.select});
 }
+
+
 

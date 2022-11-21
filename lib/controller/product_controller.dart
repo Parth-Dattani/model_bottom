@@ -96,7 +96,7 @@ class ProductController extends BaseController {
 
   //update product
   Future updateProduct() async {
-    loader.value = true;
+    //loader.value = true;
     productFormKey.currentState!.save();
     if (productFormKey.currentState!.validate()) {
       FirebaseFirestore.instance.collection("products").doc(productId.value).update({
@@ -134,6 +134,7 @@ class ProductController extends BaseController {
   }
 
   Future uploadImage() async {
+    print("loader value sd:  ${loader.value.toString()} " );
     final path = 'productImages/${nameController.value.text} ${DateTime.now()}';
     print(path);
     final file = File(pickedImage.value!.path);

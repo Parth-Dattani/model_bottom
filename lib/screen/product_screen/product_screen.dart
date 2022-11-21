@@ -12,290 +12,324 @@ class ProductScreen extends GetView<ProductController> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Scaffold(
-        appBar: AppBar(
-          title:  Text(
-            controller.isEdit.value == true ? "Edit Product" : "Add Product",
-          ),
-          leading: IconButton(
-              onPressed: () {
-                Get.back();
-              },
-              icon: const Icon(Icons.arrow_back_ios_new)),
-        ),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 20),
-            child: Form(
-              key: controller.productFormKey,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      color: Colors.white,
-                      child: Stack(
-                        children: <Widget>[
-                          Container(
-                              width: Get.width * 0.30,
-                              height: Get.height * 0.19,
-                              //margin: const EdgeInsets.all(15),
-                              //padding: const EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(15),
-                                ),
-                                border: Border.all(color: Colors.transparent),
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Colors.transparent,
-                                    offset: Offset(2, 2),
-                                    spreadRadius: 2,
-                                    blurRadius: 1,
-                                  ),
-                                ],
-                              ),
-                              child: ClipRRect(
-                                  borderRadius:
-                                      const BorderRadius.all(Radius.zero),
-                                  child:
-                                  controller.isEdit.value == true ?
-                                  Image.network(
-                                    controller.imageUrl.toString(),
-                                    fit: BoxFit.fill,
-                                  )
-                                      :
-                                  controller.pickedImage.value != null
-                                      ? Image.file(
-                                          File(controller
-                                              .pickedImage.value!.path),
-                                          fit: BoxFit.fill,
-                                        )
-                                      : Image.asset(
-                                          ImagePath.imageLogo,
-                                          fit: BoxFit.fill,
-                                        ))),
-                          controller.isUpload.value == true
-                              ? Positioned(
-                                  bottom: 2,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      controller.selectImage();
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(18.0),
-                                          side: const BorderSide(color: Colors.blue)),
-                                      elevation: 5.0,
-                                      backgroundColor: Colors.blue,
-                                      textStyle: const TextStyle(color: Colors.white),
-                                      //padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
-                                      //splashColor: Colors.grey,
-                                      minimumSize: const Size(90, 25),
+      () => Stack(
+        children: [
+          Scaffold(
+            appBar: AppBar(
+              title: Text(
+                controller.isEdit.value == true
+                    ? "Edit Product"
+                    : "Add Product",
+              ),
+              leading: IconButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  icon: const Icon(Icons.arrow_back_ios_new)),
+            ),
+            body: SafeArea(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 18.0, vertical: 20),
+                child: Form(
+                  key: controller.productFormKey,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Container(
+                          color: Colors.white,
+                          child: Stack(
+                            children: <Widget>[
+                              Container(
+                                  width: Get.width * 0.30,
+                                  height: Get.height * 0.19,
+                                  //margin: const EdgeInsets.all(15),
+                                  //padding: const EdgeInsets.all(3),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(15),
                                     ),
-                                    child: const Text("Upload Image",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        )),
-                                  ))
-                              : Positioned(
-                                  bottom: 2,
-                                  right: 20,
-                                  child: ElevatedButton(
-                                      onPressed: () {
-                                        //controller.selectImage();
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        // shape: RoundedRectangleBorder(
-                                        //     borderRadius: BorderRadius.circular(38.0),
-                                        //     side: BorderSide(color: Colors.blue)
-                                        // ),
-                                        elevation: 5.0,
-                                        backgroundColor: Colors.transparent,
-                                        textStyle:
-                                            const TextStyle(color: Colors.white),
-                                        // /minimumSize: Size(10, 5),
-                                      ),
-                                      child: IconButton(
-                                        icon: const Icon(Icons.edit),
-                                        onPressed: () {},
-                                      )),
-                                ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      controller: controller.nameController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        // fillColor: Colors.white54,
-                        labelText: "productName",
-                        contentPadding: const EdgeInsets.only(
-                            left: 14.0, bottom: 8.0, top: 8.0),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.red),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "please enter product name";
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      controller: controller.descController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        // fillColor: Colors.white54,
-                        labelText: "Description",
-                        contentPadding: const EdgeInsets.only(
-                            left: 14.0, bottom: 8.0, top: 8.0),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.red),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "please enter descrition";
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    TextFormField(
-                      controller: controller.priceController,
-                      decoration: InputDecoration(
-                        filled: true,
-                        // fillColor: Colors.white54,
-                        labelText: "Price",
-                        contentPadding: const EdgeInsets.only(
-                            left: 14.0, bottom: 8.0, top: 8.0),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.blue),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.black),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        errorBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color: Colors.red),
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return "please enter price";
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      //margin: EdgeInsets.only(left: 15, top: 0, right: 15),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: DropdownButtonHideUnderline(
-                          child: DropdownButton(
-                            style: const TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey,
-                            ),
-                            hint: Text(
-                              controller.selectedItem.value.isNotEmpty
-                                  ? controller.selectedItem.value.toString()
-                                  : "Select category",
-                              style: const TextStyle(
-                                color: Colors.grey,
-                                fontSize: 16,
-                                fontFamily: "verdana_regular",
-                              ),
-                            ),
-                            isExpanded: true,
-                            isDense: true,
-                            onChanged: (value) {
-                              controller.selectedItem.value = value!;
-                              print("select${controller.selectedItem.value}");
-                            },
-                            items: controller.categoryList.map((item) {
-                              return DropdownMenuItem(
-                                  value: item.toString(),
-                                  child: Row(
-                                    children: [
-                                      // CircleAvatar(
-                                      //   backgroundImage:  Image.asset(ImagePath.profileLogo),
-                                      // ),
-                                      // SizedBox(
-                                      //   width: 15,
-                                      // ),
-                                      Text(
-                                        item,
-                                        style: const TextStyle(
-                                            fontSize: 15, color: Colors.black),
+                                    border:
+                                        Border.all(color: Colors.transparent),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: Colors.transparent,
+                                        offset: Offset(2, 2),
+                                        spreadRadius: 2,
+                                        blurRadius: 1,
                                       ),
                                     ],
-                                  ));
-                            }).toList(),
+                                  ),
+                                  child: ClipRRect(
+                                      borderRadius:
+                                          const BorderRadius.all(Radius.zero),
+                                      child: controller.isEdit.value == true
+                                          ? Image.network(
+                                              controller.imageUrl.toString(),
+                                              fit: BoxFit.fill,
+                                            )
+                                          : controller.pickedImage.value != null
+                                              ? Image.file(
+                                                  File(controller
+                                                      .pickedImage.value!.path),
+                                                  fit: BoxFit.fill,
+                                                )
+                                              : Image.asset(
+                                                  ImagePath.imageLogo,
+                                                  fit: BoxFit.fill,
+                                                ))),
+                              controller.isUpload.value == true
+                                  ? Positioned(
+                                      bottom: 2,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          controller.selectImage();
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(18.0),
+                                              side: const BorderSide(
+                                                  color: Colors.blue)),
+                                          elevation: 5.0,
+                                          backgroundColor: Colors.blue,
+                                          textStyle: const TextStyle(
+                                              color: Colors.white),
+                                          //padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
+                                          //splashColor: Colors.grey,
+                                          minimumSize: const Size(90, 25),
+                                        ),
+                                        child: const Text("Upload Image",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            )),
+                                      ))
+                                  : Positioned(
+                                      bottom: 2,
+                                      right: 20,
+                                      child: ElevatedButton(
+                                          onPressed: () {
+                                            //controller.selectImage();
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            // shape: RoundedRectangleBorder(
+                                            //     borderRadius: BorderRadius.circular(38.0),
+                                            //     side: BorderSide(color: Colors.blue)
+                                            // ),
+                                            elevation: 5.0,
+                                            backgroundColor: Colors.transparent,
+                                            textStyle: const TextStyle(
+                                                color: Colors.white),
+                                            // /minimumSize: Size(10, 5),
+                                          ),
+                                          child: IconButton(
+                                            icon: const Icon(Icons.edit),
+                                            onPressed: () {},
+                                          )),
+                                    ),
+                            ],
                           ),
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextFormField(
+                          controller: controller.nameController,
+                          decoration: InputDecoration(
+                            filled: true,
+                            // fillColor: Colors.white54,
+                            labelText: "productName",
+                            contentPadding: const EdgeInsets.only(
+                                left: 14.0, bottom: 8.0, top: 8.0),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.blue),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.black),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.red),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "please enter product name";
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextFormField(
+                          controller: controller.descController,
+                          decoration: InputDecoration(
+                            filled: true,
+                            // fillColor: Colors.white54,
+                            labelText: "Description",
+                            contentPadding: const EdgeInsets.only(
+                                left: 14.0, bottom: 8.0, top: 8.0),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.blue),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.black),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.red),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "please enter descrition";
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextFormField(
+                          controller: controller.priceController,
+                          decoration: InputDecoration(
+                            filled: true,
+                            // fillColor: Colors.white54,
+                            labelText: "Price",
+                            contentPadding: const EdgeInsets.only(
+                                left: 14.0, bottom: 8.0, top: 8.0),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.blue),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.black),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.red),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "please enter price";
+                            }
+                            return null;
+                          },
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          //margin: EdgeInsets.only(left: 15, top: 0, right: 15),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.black),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.grey,
+                                ),
+                                hint: Text(
+                                  controller.selectedItem.value.isNotEmpty
+                                      ? controller.selectedItem.value.toString()
+                                      : "Select category",
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 16,
+                                    fontFamily: "verdana_regular",
+                                  ),
+                                ),
+                                isExpanded: true,
+                                isDense: true,
+                                onChanged: (value) {
+                                  controller.selectedItem.value = value!;
+                                  print(
+                                      "select${controller.selectedItem.value}");
+                                },
+                                items: controller.categoryList.map((item) {
+                                  return DropdownMenuItem(
+                                      value: item.toString(),
+                                      child: Row(
+                                        children: [
+                                          // CircleAvatar(
+                                          //   backgroundImage:  Image.asset(ImagePath.profileLogo),
+                                          // ),
+                                          // SizedBox(
+                                          //   width: 15,
+                                          // ),
+                                          Text(
+                                            item,
+                                            style: const TextStyle(
+                                                fontSize: 15,
+                                                color: Colors.black),
+                                          ),
+                                        ],
+                                      ));
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            controller.loader.value = true;
+                            controller.isEdit.value == true
+                                ? controller.updateProduct()
+                                : controller.addProduct(context);
 
-                    ElevatedButton(
-                      onPressed: () {
-                        controller.isEdit.value == true ?
-                            controller.updateProduct() :
-                        controller.addProduct(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: const StadiumBorder(),
-                      ),
-                      child:  Text(controller.isEdit.value == true ? "Save" : "Add"),
-                    )
-                  ],
+                            //  Center(
+                            //   child: Column(
+                            //     crossAxisAlignment: CrossAxisAlignment.center,
+                            //     children: const [
+                            //       Text("no data"),
+                            //       CircularProgressIndicator()
+                            //     ],
+                            //   ),
+                            // );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: const StadiumBorder(),
+                          ),
+                          child: Text(
+                              controller.isEdit.value == true ? "Save" : "Add"),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
           ),
-        ),
+          controller.loader.value
+              ? const Opacity(
+                  opacity: 0.6,
+                  child: ModalBarrier(
+                      dismissible: false, color: Colors.grey))
+              : const SizedBox(),
+          controller.loader.value
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(Colors.red),
+                  ),
+                )
+              : Container(),
+        ],
       ),
     );
   }
