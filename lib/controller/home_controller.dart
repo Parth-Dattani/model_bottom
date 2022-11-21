@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:model_bottom/controller/base_controller.dart';
@@ -26,10 +27,8 @@ class HomeController extends BaseController {
   final Stream<QuerySnapshot> usersStream =
       FirebaseFirestore.instance.collection('users').snapshots();
 
-
-   RxBool isAdmin = false.obs;
+  RxBool isAdmin = false.obs;
   Rxn<bool> isAdmin2 = Rxn<bool>();
-
 
   @override
   void onInit() {
@@ -50,9 +49,9 @@ class HomeController extends BaseController {
 
     var userRole = loggedInUser.role.toString();
 
-    if(userRole.toString() == "admin"){
+    if (userRole.toString() == "admin") {
       isAdmin.value = !isAdmin.value;
-      isAdmin2.value = !isAdmin2.value! ;
+      isAdmin2.value = !isAdmin2.value!;
     }
   }
 
@@ -106,6 +105,7 @@ class HomeController extends BaseController {
   final CollectionReference<Map<String, dynamic>> userList =
       FirebaseFirestore.instance.collection('users');
 
+  //get count of total user
   Future<void> countUsers() async {
     AggregateQuerySnapshot query = await userList.count().get();
     debugPrint('The number of users: ${query.count}');
@@ -113,17 +113,18 @@ class HomeController extends BaseController {
     totalUsers.value = query.count.toString();
   }
 
-  Future deleteProduct(context, productIndex)async{
-    await FirebaseFirestore
-        .instance
-        .collection(
-        "products")
-        .doc(productIndex
-        .get("productID"))
+  Future deleteProduct(context, productIndex) async {
+    await FirebaseFirestore.instance
+        .collection("products")
+        .doc(productIndex.get("productID"))
         .delete();
+
+    print("delete image url");
+    print(FirebaseStorage.instance.refFromURL(productIndex.get("imageUrl")));
+    FirebaseStorage.instance.refFromURL(productIndex.get("imageUrl")).delete();
+
     Get.back();
   }
-
 }
 
 class SelectDrawer {
@@ -133,6 +134,3 @@ class SelectDrawer {
 
   SelectDrawer({this.title, this.icon, this.select});
 }
-
-
-

@@ -35,13 +35,11 @@ class UsersScreen extends GetView<UsersController> {
                       itemBuilder: (context, index) {
                         return Column(
                           children: [
-                            dataList("User Name : ",
-                                userData[index].get('userName')),
-                            dataList("email : ", userData[index].get('role')),
+                            dataList("User Name : ", userData[index].get('userName')),
+                            dataList("email : ", userData[index].get('email')),
+                            dataList("role : ", userData[index].get('role')),
                             //dataList("email : ",  snapshot.data!.docs.map(user.toMap(user.))),
-                            const SizedBox(
-                              height: 50,
-                            ),
+                            const SizedBox(height: 50,),
                           ],
                         );
                       })

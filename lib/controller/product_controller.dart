@@ -57,13 +57,10 @@ class ProductController extends BaseController {
   final currenUserId = FirebaseAuth.instance.currentUser!.uid;
 
 
-
-
-
   //add new product
   Future<void> addProduct(context) async {
     await uploadImage();
-    if (productFormKey.currentState!.validate()) {
+
       FirebaseFirestore.instance.collection("products").add({
         "product_name": nameController.text,
         "description": descController.text,
@@ -91,7 +88,7 @@ class ProductController extends BaseController {
           Get.back();
         });
       });
-    }
+
   }
 
   //update product
@@ -119,9 +116,6 @@ class ProductController extends BaseController {
     FirebaseFirestore.instance.collection("products").doc(productId.value).delete();
   }
 
-  // Future selectFile()async{
-  //   final res= await FilePicker.platform.pickFiles();
-  // }
 
   Future selectImage() async {
     pickedImage.value =

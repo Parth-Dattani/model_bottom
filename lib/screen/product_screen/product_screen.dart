@@ -132,6 +132,7 @@ class ProductScreen extends GetView<ProductController> {
                             ],
                           ),
                         ),
+                        // controller.pickedImage.value == null ?Text('please select a product Image') : Container(),
                         const SizedBox(
                           height: 20,
                         ),
@@ -283,25 +284,31 @@ class ProductScreen extends GetView<ProductController> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                       const SizedBox(
                           height: 20,
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            controller.loader.value = true;
-                            controller.isEdit.value == true
-                                ? controller.updateProduct()
-                                : controller.addProduct(context);
 
-                            //  Center(
-                            //   child: Column(
-                            //     crossAxisAlignment: CrossAxisAlignment.center,
-                            //     children: const [
-                            //       Text("no data"),
-                            //       CircularProgressIndicator()
-                            //     ],
-                            //   ),
-                            // );
+
+                          if (controller.productFormKey.currentState!.validate() /* &&  controller.pickedImage.value != null*/) {
+
+                            if(controller.selectedItem.value.isNotEmpty) {
+                              controller.loader.value = true;
+                              controller.isEdit.value == true
+                                  ? controller.updateProduct()
+                                  : controller.addProduct(context);
+                            }
+                            else{
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text("Please select a Category" ,)));
+                            }
+                          }
+                         /* else{
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("Please select a Product Image" ,)));
+                          }*/
+
                           },
                           style: ElevatedButton.styleFrom(
                             shape: const StadiumBorder(),

@@ -75,7 +75,7 @@ class HomeScreen extends GetView<HomeController> {
                 onPressed: () {
                   Get.toNamed(ProductScreen.pageId, arguments: {
                     'editProduct': controller.isEdit.value = false,
-                    'deleteProduct': controller.isDelete.value = false,
+                    //deleteProduct': controller.isDelete.value = false,
                     'proImage': '',
                     'proName': '',
                     'proPrice': '',
@@ -318,6 +318,7 @@ class HomeScreen extends GetView<HomeController> {
     );
   }
 
+  //get all products
   Widget productList() {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance.collection('products').snapshots(),
@@ -328,178 +329,168 @@ class HomeScreen extends GetView<HomeController> {
             padding: const EdgeInsets.only(top: 15.0),
             child: GridView.builder(
               itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    controller.role.value == "admin"
-                        ? print(getProduct[index].get("product_name"))
-                        : null;
-                  },
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            productView(context, getProduct[index]);
-                          },
-                          child: Card(
-                            elevation: 5,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Expanded(
-                                  child: SizedBox(
-                                      child: Stack(
-                                    children: [
-                                      ClipRRect(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(15)),
-                                          child:
-                                              /*controller.pickedImage.value != null
-                                              ? Image.file(
-                                            File(controller.pickedImage.value!.path),
-                                            fit: BoxFit.fill,
-                                          )
-                                              :*/
-                                              Image.network(
-                                            getProduct[index]
-                                                .get("imageUrl")
-                                                .toString(),
-                                          )),
-                                      controller.role.value == "admin"
-                                          ? Positioned(
-                                              right: -1,
-                                              bottom: -4,
-                                              child: SizedBox(
-                                                width: Get.width*0.33,
-                                                child: Row(
-                                                  //crossAxisAlignment: CrossAxisAlignment.start,
-                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                  children: [
-                                                    IconButton(
-                                                        onPressed: () {
-                                                          Get.toNamed(
-                                                              ProductScreen
-                                                                  .pageId,
-                                                              arguments: {
-                                                                'editProduct':
-                                                                    controller
-                                                                            .isEdit
-                                                                            .value =
-                                                                        true,
-                                                                'productId':
-                                                                    getProduct[
-                                                                            index]
-                                                                        .get(
-                                                                            "productID"),
-                                                                'proImage':
-                                                                    getProduct[
-                                                                            index]
-                                                                        .get(
-                                                                            "imageUrl"),
-                                                                'proName': getProduct[
-                                                                        index]
-                                                                    .get(
-                                                                        "product_name"),
-                                                                'proPrice':
-                                                                    getProduct[
-                                                                            index]
-                                                                        .get(
-                                                                            "price"),
-                                                                'proCategory':
-                                                                    getProduct[
-                                                                            index]
-                                                                        .get(
-                                                                            "category"),
-                                                                'proDescription':
-                                                                    getProduct[
-                                                                            index]
-                                                                        .get(
-                                                                            "description"),
-                                                              });
-                                                          //productView(context, getProduct[index]);
-                                                        },
-                                                        icon: const Icon(
-                                                          Icons.edit,
-                                                          color: Colors.green,
-                                                        )),
+                return Column(
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          productView(context, getProduct[index]);
+                        },
+                        child: Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Expanded(
+                                child: SizedBox(
+                                    child: Stack(
+                                  children: [
+                                    ClipRRect(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(15)),
+                                        child:
+                                            /*controller.pickedImage.value != null
+                                            ? Image.file(
+                                          File(controller.pickedImage.value!.path),
+                                          fit: BoxFit.fill,
+                                        )
+                                            :*/
+                                            Image.network(
+                                          getProduct[index]
+                                              .get("imageUrl")
+                                              .toString(),
+                                        )),
+                                    controller.role.value == "admin"
+                                        ? Positioned(
+                                            right: -1,
+                                            bottom: -4,
+                                            child: SizedBox(
+                                              width: Get.width*0.33,
+                                              child: Row(
+                                                //crossAxisAlignment: CrossAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  IconButton(
+                                                      onPressed: () {
+                                                        Get.toNamed(
+                                                            ProductScreen
+                                                                .pageId,
+                                                            arguments: {
+                                                              'editProduct':
+                                                                  controller
+                                                                          .isEdit
+                                                                          .value =
+                                                                      true,
+                                                              'productId':
+                                                                  getProduct[
+                                                                          index]
+                                                                      .get(
+                                                                          "productID"),
+                                                              'proImage':
+                                                                  getProduct[
+                                                                          index]
+                                                                      .get(
+                                                                          "imageUrl"),
+                                                              'proName': getProduct[
+                                                                      index]
+                                                                  .get(
+                                                                      "product_name"),
+                                                              'proPrice':
+                                                                  getProduct[
+                                                                          index]
+                                                                      .get(
+                                                                          "price"),
+                                                              'proCategory':
+                                                                  getProduct[
+                                                                          index]
+                                                                      .get(
+                                                                          "category"),
+                                                              'proDescription':
+                                                                  getProduct[
+                                                                          index]
+                                                                      .get(
+                                                                          "description"),
+                                                            });
+                                                        //productView(context, getProduct[index]);
+                                                      },
+                                                      icon: const Icon(
+                                                        Icons.edit,
+                                                        color: Colors.green,
+                                                      )),
 
-                                                    IconButton(
-                                                        onPressed: () {
-                                                          showDialog(
-                                                            context: context,
-                                                            builder: (context) {
-                                                              return AlertDialog(
-                                                                title: Container(
-                                                                    color: Colors
-                                                                        .blue,
+                                                  IconButton(
+                                                      onPressed: () {
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return AlertDialog(
+                                                              title: Container(
+                                                                  color: Colors
+                                                                      .blue,
+                                                                  child: const Text(
+                                                                      "Flutter Product!!")),
+                                                              content: const Text(
+                                                                  "Are You Sure Product delete ? "),
+                                                              actions: [
+                                                                ElevatedButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      Get.back();
+                                                                    },
                                                                     child: const Text(
-                                                                        "Flutter Product!!")),
-                                                                content: const Text(
-                                                                    "Are You Sure Product delete ? "),
-                                                                actions: [
-                                                                  ElevatedButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                        Get.back();
-                                                                      },
-                                                                      child: const Text(
-                                                                          "Cancel")),
-                                                                  ElevatedButton(
-                                                                      onPressed:
-                                                                          () {
-                                                                            controller.deleteProduct(context, getProduct[index]);
-                                                                        ScaffoldMessenger.of(context).showSnackBar(
-                                                                            const SnackBar(content: Text("Product delete Succesfully",)));
-                                                                      },
-                                                                      child: const Text(
-                                                                          "Delete")),
-                                                                ],
-                                                              );
-                                                            },
-                                                          );
-                                                        },
-                                                        icon: const Icon(
-                                                          Icons.delete,
-                                                          color: Colors.red,
-                                                        )),
-                                                  ],
-                                                ),
-                                              ))
-                                          : const SizedBox(
-                                              width: 0,),
-                                    ],
-                                  )),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                dataList("Name : ",
-                                    getProduct[index].get(("product_name"))),
-                                //dataList("Description", getProduct[index].get("description")),
-                                dataList(
-                                    "Price : ", getProduct[index].get("price")),
-                                dataList("Category : ",
-                                    getProduct[index].get("category")),
-                                Text(
-                                  "Description : ${getProduct[index].get("description")}",
-                                  style: const TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                dataList("", ""),
-                              ],
-                            ),
+                                                                        "Cancel")),
+                                                                ElevatedButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                          controller.deleteProduct(context, getProduct[index]);
+                                                                      ScaffoldMessenger.of(context).showSnackBar(
+                                                                          const SnackBar(content: Text("Product delete Succesfully",)));
+                                                                    },
+                                                                    child: const Text(
+                                                                        "Delete")),
+                                                              ],
+                                                            );
+                                                          },
+                                                        );
+                                                      },
+                                                      icon: const Icon(
+                                                        Icons.delete,
+                                                        color: Colors.red,
+                                                      )),
+                                                ],
+                                              ),
+                                            ))
+                                        : const SizedBox(
+                                            width: 0,),
+                                  ],
+                                )),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              dataList("Name : ", getProduct[index].get(("product_name"))),
+                              //dataList("Description", getProduct[index].get("description")),
+                              dataList("Price : ", getProduct[index].get("price")),
+                              dataList("Category : ", getProduct[index].get("category")),
+                              Text(
+                                "Description : ${getProduct[index].get("description")}",
+                                style: const TextStyle(
+                                    overflow: TextOverflow.ellipsis,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              dataList("", ""),
+                            ],
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 );
               },
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -539,14 +530,17 @@ class HomeScreen extends GetView<HomeController> {
       // mainAxisAlignment: MainAxisAlignment.start,
       children: [
         SizedBox(
-          width: 70,
-          child: Text(title,
-              textAlign: TextAlign.left,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
-                color: Colors.black,
-              )),
+          width: 80,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 5.0),
+            child: Text(title,
+                textAlign: TextAlign.left,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                )),
+          ),
         ),
         Expanded(
           child: Text(
@@ -562,6 +556,7 @@ class HomeScreen extends GetView<HomeController> {
     );
   }
 
+  //product display at cardView
   Future productView(context, product) {
     return showDialog(
       barrierDismissible: false,
