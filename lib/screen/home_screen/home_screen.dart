@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
 import 'package:model_bottom/constant/image_path.dart';
 import 'package:model_bottom/controller/controller.dart';
 import 'package:model_bottom/screen/product_screen/product_screen.dart';
@@ -74,8 +73,9 @@ class HomeScreen extends GetView<HomeController> {
         floatingActionButton: controller.role.value == "admin"
             ? FloatingActionButton.small(
                 onPressed: () {
-                  Get.toNamed(ProductScreen.pageId,arguments: {
+                  Get.toNamed(ProductScreen.pageId, arguments: {
                     'editProduct': controller.isEdit.value = false,
+                    'deleteProduct': controller.isDelete.value = false,
                     'proImage': '',
                     'proName': '',
                     'proPrice': '',
@@ -338,7 +338,7 @@ class HomeScreen extends GetView<HomeController> {
                     children: [
                       Expanded(
                         child: GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             productView(context, getProduct[index]);
                           },
                           child: Card(
@@ -375,24 +375,102 @@ class HomeScreen extends GetView<HomeController> {
                                           ? Positioned(
                                               right: -1,
                                               bottom: -4,
-                                              child: IconButton(
-                                                  onPressed: () {
+                                              child: SizedBox(
+                                                width: Get.width*0.33,
+                                                child: Row(
+                                                  //crossAxisAlignment: CrossAxisAlignment.start,
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    IconButton(
+                                                        onPressed: () {
+                                                          Get.toNamed(
+                                                              ProductScreen
+                                                                  .pageId,
+                                                              arguments: {
+                                                                'editProduct':
+                                                                    controller
+                                                                            .isEdit
+                                                                            .value =
+                                                                        true,
+                                                                'productId':
+                                                                    getProduct[
+                                                                            index]
+                                                                        .get(
+                                                                            "productID"),
+                                                                'proImage':
+                                                                    getProduct[
+                                                                            index]
+                                                                        .get(
+                                                                            "imageUrl"),
+                                                                'proName': getProduct[
+                                                                        index]
+                                                                    .get(
+                                                                        "product_name"),
+                                                                'proPrice':
+                                                                    getProduct[
+                                                                            index]
+                                                                        .get(
+                                                                            "price"),
+                                                                'proCategory':
+                                                                    getProduct[
+                                                                            index]
+                                                                        .get(
+                                                                            "category"),
+                                                                'proDescription':
+                                                                    getProduct[
+                                                                            index]
+                                                                        .get(
+                                                                            "description"),
+                                                              });
+                                                          //productView(context, getProduct[index]);
+                                                        },
+                                                        icon: const Icon(
+                                                          Icons.edit,
+                                                          color: Colors.green,
+                                                        )),
 
-                                                    Get.toNamed(ProductScreen.pageId, arguments: {
-                                                      'editProduct': controller.isEdit.value = true,
-                                                      'proImage': getProduct[index].get("imageUrl"),
-                                                      'proName': getProduct[index].get("product_name"),
-                                                      'proPrice': getProduct[index].get("price"),
-                                                      'proCategory': getProduct[index].get("category"),
-                                                      'proDescription': getProduct[index].get("description"),
-
-                                                    });
-                                                    //productView(context, getProduct[index]);
-                                                  },
-                                                  icon: const Icon(
-                                                    Icons.edit,
-                                                    color: Colors.green,
-                                                  )))
+                                                    IconButton(
+                                                        onPressed: () {
+                                                          showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return AlertDialog(
+                                                                title: Container(
+                                                                    color: Colors
+                                                                        .blue,
+                                                                    child: const Text(
+                                                                        "Flutter Product!!")),
+                                                                content: const Text(
+                                                                    "Are You Sure Product delete ? "),
+                                                                actions: [
+                                                                  ElevatedButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                        Get.back();
+                                                                      },
+                                                                      child: const Text(
+                                                                          "Cancel")),
+                                                                  ElevatedButton(
+                                                                      onPressed:
+                                                                          () {
+                                                                            controller.deleteProduct(context, getProduct[index]);
+                                                                        ScaffoldMessenger.of(context).showSnackBar(
+                                                                            const SnackBar(content: Text("Product delete Succesfully",)));
+                                                                      },
+                                                                      child: const Text(
+                                                                          "Delete")),
+                                                                ],
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                        icon: const Icon(
+                                                          Icons.delete,
+                                                          color: Colors.red,
+                                                        )),
+                                                  ],
+                                                ),
+                                              ))
                                           : const SizedBox(
                                               width: 0,
                                             ),
@@ -487,43 +565,56 @@ class HomeScreen extends GetView<HomeController> {
 
   Future productView(context, product) {
     return showDialog(
+      barrierDismissible: false,
       context: context,
       builder: (context) {
         return Stack(
           children: [
             SizedBox(
-              height: Get.height*0.75,
+              height: Get.height * 0.75,
               child: AlertDialog(
                 title: Container(
                   color: Colors.blue,
-                  child: Text(product.get("product_name",),style: TextStyle(fontSize: 20),textAlign: TextAlign.center,),
+                  child: Text(
+                    product.get(
+                      "product_name",
+                    ),
+                    style: TextStyle(fontSize: 20),
+                    textAlign: TextAlign.center,
+                  ),
                 ),
                 content: Column(
                   children: [
-                    Image.network(product.get("imageUrl").toString(), fit: BoxFit.fitHeight, height: Get.height*0.4, ),
+                    Image.network(
+                      product.get("imageUrl").toString(),
+                      fit: BoxFit.fitHeight,
+                      height: Get.height * 0.4,
+                    ),
                     Text("Category :  ${product.get("category")}"),
                     Text("Price :  ${product.get("price").toString()}"),
                     Text("Description :  ${product.get("description")}"),
-
                   ],
                 ),
               ),
             ),
             Positioned(
               top: 0.0,
-              right:20.0,
+              right: 35.0,
               child: FloatingActionButton(
-                onPressed: (){
+                onPressed: () {
                   Navigator.pop(context);
                 },
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(80)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(80)),
                 backgroundColor: Colors.white,
                 mini: true,
-                child: const Icon(Icons.close, color: Colors.red,),
+                child: const Icon(
+                  Icons.close,
+                  color: Colors.red,
+                ),
                 //elevation: 5.0,
               ),
             ),
-
           ],
         );
       },

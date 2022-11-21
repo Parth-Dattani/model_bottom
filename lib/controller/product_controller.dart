@@ -27,12 +27,14 @@ class ProductController extends BaseController {
 
   RxBool isUpload = true.obs;
   RxString imageUrl = "".obs;
+  RxString productId = "".obs;
 
   @override
   void onInit() {
     clearController();
-    isEdit.value =Get.arguments['editProduct'];
-    imageUrl.value =Get.arguments['proImage'].toString();
+    isEdit.value = Get.arguments['editProduct'];
+    imageUrl.value = Get.arguments['proImage'].toString();
+    productId.value = Get.arguments['productId'].toString();
     nameController.text = Get.arguments['proName'].toString();
     priceController.text = Get.arguments['proPrice'].toString();
     selectedItem.value = Get.arguments['proCategory'].toString();
@@ -42,6 +44,7 @@ class ProductController extends BaseController {
     print(Get.arguments['proPrice']);
     print(Get.arguments['proCategory']);
     print(Get.arguments['proDescription']);
+    print("Product Id : ${productId.value}");
     super.onInit();
   }
 
@@ -54,30 +57,10 @@ class ProductController extends BaseController {
   final currenUserId = FirebaseAuth.instance.currentUser!.uid;
 
 
-  // Future updateProduct() async {
-  //   final pid = FirebaseFirestore.instance.doc("product").id;
-  //   final s = FirebaseFirestore.instance.collection('users').snapshots();
-  //   print(s.first);
-  //   print("Filesdfdsfdf $s.first");
-  //   loader.value = true;
-  //   productFormKey.currentState!.save();
-  //   if (productFormKey.currentState!.validate()) {
-  //     FirebaseFirestore.instance.collection("products").doc(id).update(
-  //          imageUrl.value.toString(),
-  //        nameController.text,
-  //       "description": descController.text,
-  //   "price": priceController.text,
-  //   "category": selectedItem.value.toString(),
-  //     );
-  //
-  //     Future.delayed(const Duration(seconds: 5), () {
-  //       Get.back();
-  //       loader.value = false;
-  //     });
-  //
-  //   }
-  // }
 
+
+
+  //add new product
   Future<void> addProduct(context) async {
     await uploadImage();
     if (productFormKey.currentState!.validate()) {
@@ -89,6 +72,8 @@ class ProductController extends BaseController {
         "imageUrl": imageUrl.value.toString(),
       }).then((value) {
         //uploadImage();
+        print("Added Product Value ${value.id}");
+        value.set({'productID': value.id}, SetOptions(merge: true));
         showDialog(
           context: context,
           builder: (context) {
@@ -109,6 +94,31 @@ class ProductController extends BaseController {
     }
   }
 
+  //update product
+  Future updateProduct() async {
+    //loader.value = true;
+    productFormKey.currentState!.save();
+    if (productFormKey.currentState!.validate()) {
+      FirebaseFirestore.instance.collection("products").doc(productId.value).update({
+        "product_name": nameController.text,
+        "description": descController.text,
+        "price": priceController.text,
+        "category": selectedItem.value.toString(),
+        "imageUrl": imageUrl.value.toString(),
+      });
+      Future.delayed(const Duration(seconds: 5), () {
+        Get.back();
+        loader.value = false;
+      });
+      print("Update data ");
+    }
+  }
+
+  //delete product
+  Future deleteProduct() async {
+    FirebaseFirestore.instance.collection("products").doc(productId.value).delete();
+  }
+
   // Future selectFile()async{
   //   final res= await FilePicker.platform.pickFiles();
   // }
@@ -124,6 +134,7 @@ class ProductController extends BaseController {
   }
 
   Future uploadImage() async {
+    print("loader value sd:  ${loader.value.toString()} " );
     final path = 'productImages/${nameController.value.text} ${DateTime.now()}';
     print(path);
     final file = File(pickedImage.value!.path);
