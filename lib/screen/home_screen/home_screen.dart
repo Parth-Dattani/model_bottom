@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:model_bottom/constant/image_path.dart';
 import 'package:model_bottom/controller/controller.dart';
+import 'package:model_bottom/model/product_response.dart';
+import 'package:model_bottom/screen/cart_screen/cart_screen.dart';
 import 'package:model_bottom/screen/product_screen/product_screen.dart';
 
 class HomeScreen extends GetView<HomeController> {
@@ -382,40 +384,13 @@ class HomeScreen extends GetView<HomeController> {
                                                             ProductScreen
                                                                 .pageId,
                                                             arguments: {
-                                                              'editProduct':
-                                                                  controller
-                                                                          .isEdit
-                                                                          .value =
-                                                                      true,
-                                                              'productId':
-                                                                  getProduct[
-                                                                          index]
-                                                                      .get(
-                                                                          "productID"),
-                                                              'proImage':
-                                                                  getProduct[
-                                                                          index]
-                                                                      .get(
-                                                                          "imageUrl"),
-                                                              'proName': getProduct[
-                                                                      index]
-                                                                  .get(
-                                                                      "product_name"),
-                                                              'proPrice':
-                                                                  getProduct[
-                                                                          index]
-                                                                      .get(
-                                                                          "price"),
-                                                              'proCategory':
-                                                                  getProduct[
-                                                                          index]
-                                                                      .get(
-                                                                          "category"),
-                                                              'proDescription':
-                                                                  getProduct[
-                                                                          index]
-                                                                      .get(
-                                                                          "description"),
+                                                              'editProduct': controller.isEdit.value = true,
+                                                              'productId': getProduct[index].get("productID"),
+                                                              'proImage': getProduct[index].get("imageUrl"),
+                                                              'proName': getProduct[index].get("productName"),
+                                                              'proPrice': getProduct[index].get("price"),
+                                                              'proCategory': getProduct[index].get("category"),
+                                                              'proDescription': getProduct[index].get("description"),
                                                             });
                                                         //productView(context, getProduct[index]);
                                                       },
@@ -474,9 +449,9 @@ class HomeScreen extends GetView<HomeController> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              dataList("Name : ", getProduct[index].get(("product_name"))),
+                              dataList("Name : ", getProduct[index].get("productName")),
                               //dataList("Description", getProduct[index].get("description")),
-                              dataList("Price : ", getProduct[index].get("price")),
+                              dataList("Price : ", getProduct[index].get("price").toString()),
                               dataList("Category : ", getProduct[index].get("category")),
                               Text(
                                 "Description : ${getProduct[index].get("description")}",
@@ -558,20 +533,22 @@ class HomeScreen extends GetView<HomeController> {
 
   //product display at cardView
   Future productView(context, product) {
-    return showDialog(
+    return
+      showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) {
         return Stack(
           children: [
             SizedBox(
-              height: Get.height * 0.75,
+              height: Get.height * 0.9,
+              //width: Get.width,
               child: AlertDialog(
                 title: Container(
                   color: Colors.blue,
                   child: Text(
                     product.get(
-                      "product_name",
+                      "productName",
                     ),
                     style: TextStyle(fontSize: 20),
                     textAlign: TextAlign.center,
@@ -587,10 +564,30 @@ class HomeScreen extends GetView<HomeController> {
                     Text("Category :  ${product.get("category")}"),
                     Text("Price :  ${product.get("price").toString()}"),
                     Text("Description :  ${product.get("description")}"),
+
+                    ElevatedButton(onPressed: (){
+                      FirebaseFirestore.instance.collection("cart").add(
+                          ProductResponse(
+                            productName:product.get("productName"),
+                            description: product.get("description"),
+                            price: product.get("price"),
+                            category: product.get("category"),
+                            imageUrl: product.get("imageUrl"),
+                            productID: product.get("productID").toString(),
+                          ).toMap()
+                      ).then((value) {
+                        value.set({"cartID" : value.id}, SetOptions(merge: true));
+                      });
+                      Get.offAndToNamed(CartScreen.pageId,
+                      );
+
+
+                    }, child: const Text("Add Cart")),
                   ],
                 ),
               ),
             ),
+
             Positioned(
               top: 0.0,
               right: 35.0,

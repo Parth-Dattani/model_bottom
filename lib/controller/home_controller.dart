@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:model_bottom/controller/base_controller.dart';
+import 'package:model_bottom/model/product_response.dart';
 import 'package:model_bottom/screen/screen.dart';
 import '../model/model.dart';
 import '../utill/utill.dart';
@@ -62,6 +63,8 @@ class HomeController extends BaseController {
         .add(SelectDrawer(title: "Users", icon: Icons.person, select: false));
     drawerItems.add(
         SelectDrawer(title: "Edit Profile", icon: Icons.edit, select: false));
+    drawerItems.add(
+        SelectDrawer(title: "Cart", icon: Icons.shopping_cart, select: false));
     drawerItems
         .add(SelectDrawer(title: "Log out", icon: Icons.logout, select: false));
   }
@@ -89,7 +92,8 @@ class HomeController extends BaseController {
                 {'name': loggedInUser.userName.toString()},
                 {'email': loggedInUser.email},
                 {'role': loggedInUser.role},
-              ])
+              ]) :
+    drawerItems[index].title == "Cart" ? Get.toNamed(CartScreen.pageId)
             : drawerItems[index].title == "Log out"
                 ? logOut()
                 : Get.context;
@@ -125,6 +129,18 @@ class HomeController extends BaseController {
 
     Get.back();
   }
+
+  // Future addToCart() async {
+  //   await FirebaseFirestore.instance.collection("cart").add(
+  //     ProductResponse(
+  //       imageUrl: ima,
+  //       category: ,
+  //       price: ,
+  //       description: ,
+  //       productName: ,
+  //     ).toMap()
+  //   );
+  // }
 }
 
 class SelectDrawer {

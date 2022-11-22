@@ -8,3 +8,4 @@ export 'splash_binding.dart';
 export 'profile_binding.dart';
 export 'users_binding.dart';
 export 'product_binding.dart';
+export 'cart_binding.dart';

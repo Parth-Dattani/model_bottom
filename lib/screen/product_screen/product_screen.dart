@@ -137,7 +137,7 @@ class ProductScreen extends GetView<ProductController> {
                           height: 20,
                         ),
                         TextFormField(
-                          controller: controller.nameController,
+                          controller: controller.productNameController,
                           decoration: InputDecoration(
                             filled: true,
                             // fillColor: Colors.white54,

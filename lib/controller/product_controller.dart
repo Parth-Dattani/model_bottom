@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:model_bottom/controller/base_controller.dart';
+import 'package:model_bottom/model/product_response.dart';
 
 class ProductController extends BaseController {
-  TextEditingController nameController = TextEditingController();
+  TextEditingController productNameController = TextEditingController();
   TextEditingController descController = TextEditingController();
   TextEditingController priceController = TextEditingController();
 
@@ -29,13 +30,15 @@ class ProductController extends BaseController {
   RxString imageUrl = "".obs;
   RxString productId = "".obs;
 
+  ProductResponse product = ProductResponse();
+
   @override
   void onInit() {
     clearController();
     isEdit.value = Get.arguments['editProduct'];
     imageUrl.value = Get.arguments['proImage'].toString();
     productId.value = Get.arguments['productId'].toString();
-    nameController.text = Get.arguments['proName'].toString();
+    productNameController.text = Get.arguments['proName'].toString();
     priceController.text = Get.arguments['proPrice'].toString();
     selectedItem.value = Get.arguments['proCategory'].toString();
     descController.text = Get.arguments['proDescription'].toString();
@@ -49,46 +52,53 @@ class ProductController extends BaseController {
   }
 
   void clearController() {
-    nameController.clear();
+    productNameController.clear();
     descController.clear();
     priceController.clear();
   }
 
   final currenUserId = FirebaseAuth.instance.currentUser!.uid;
 
-
   //add new product
   Future<void> addProduct(context) async {
     await uploadImage();
-
-      FirebaseFirestore.instance.collection("products").add({
-        "product_name": nameController.text,
-        "description": descController.text,
-        "price": priceController.text,
-        "category": selectedItem.value.toString(),
-        "imageUrl": imageUrl.value.toString(),
-      }).then((value) {
-        //uploadImage();
-        print("Added Product Value ${value.id}");
-        value.set({'productID': value.id}, SetOptions(merge: true));
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title:
-                  Container(color: Colors.blue, child: const Text("Flutter!!")),
-              content: const Text("Product Added Successfully..."),
-            );
-          },
-        );
-        clearController();
-        Future.delayed(const Duration(seconds: 3), () {
-          //Get.offAndToNamed(HomeScreen.pageId);
-          Get.back();
-          Get.back();
-        });
+    await FirebaseFirestore.instance
+        .collection("products")
+        .add(ProductResponse(
+                    productName: productNameController.text,
+                    description: descController.text,
+                    price: int.parse(priceController.text),
+                    category: selectedItem.value.toString(),
+                    imageUrl: imageUrl.value.toString())
+                .toMap()
+            //  {
+            // "product_name": nameController.text,
+            // "description": descController.text,
+            // "price": priceController.text,
+            // "category": selectedItem.value.toString(),
+            // "imageUrl": imageUrl.value.toString(),}
+            )
+        .then((value) {
+      //uploadImage();
+      print("Added Product Value ${value.id}");
+      value.set({'productID': value.id}, SetOptions(merge: true));
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title:
+                Container(color: Colors.blue, child: const Text("Flutter!!")),
+            content: const Text("Product Added Successfully..."),
+          );
+        },
+      );
+      clearController();
+      Future.delayed(const Duration(seconds: 3), () {
+        //Get.offAndToNamed(HomeScreen.pageId);
+        Get.back();
+        Get.back();
       });
-
+    });
   }
 
   //update product
@@ -96,13 +106,16 @@ class ProductController extends BaseController {
     //loader.value = true;
     productFormKey.currentState!.save();
     if (productFormKey.currentState!.validate()) {
-      FirebaseFirestore.instance.collection("products").doc(productId.value).update({
-        "product_name": nameController.text,
-        "description": descController.text,
-        "price": priceController.text,
-        "category": selectedItem.value.toString(),
-        "imageUrl": imageUrl.value.toString(),
-      });
+      FirebaseFirestore.instance
+          .collection("products")
+          .doc(productId.value)
+          .update(ProductResponse(
+            productName: productNameController.text,
+            description: descController.text,
+            price: int.parse(priceController.text),
+            category: selectedItem.value.toString(),
+            imageUrl: imageUrl.value.toString(),
+          ).toMap());
       Future.delayed(const Duration(seconds: 5), () {
         Get.back();
         loader.value = false;
@@ -113,9 +126,11 @@ class ProductController extends BaseController {
 
   //delete product
   Future deleteProduct() async {
-    FirebaseFirestore.instance.collection("products").doc(productId.value).delete();
+    FirebaseFirestore.instance
+        .collection("products")
+        .doc(productId.value)
+        .delete();
   }
-
 
   Future selectImage() async {
     pickedImage.value =
@@ -128,8 +143,8 @@ class ProductController extends BaseController {
   }
 
   Future uploadImage() async {
-    print("loader value sd:  ${loader.value.toString()} " );
-    final path = 'productImages/${nameController.value.text} ${DateTime.now()}';
+    print("loader value sd:  ${loader.value.toString()} ");
+    final path = 'productImages/${productNameController.value.text} ${DateTime.now()}';
     print(path);
     final file = File(pickedImage.value!.path);
     print("File $file");

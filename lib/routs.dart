@@ -1,10 +1,3 @@
-// final List<GetPage> appPage = [
-//   GetPage(
-//       name: HomeScreen.pageId,
-//       page: () => HomeScreen(),
-//       binding: HomeBinding()),
-// ];
-
 import 'package:get/get.dart';
 import 'package:model_bottom/binding/binding.dart';
 import 'package:model_bottom/screen/pagination_screen/pagination_screen.dart';
@@ -51,4 +44,8 @@ final List<GetPage> appPage = [
       name: ProductScreen.pageId,
       page: () => ProductScreen(),
       binding: ProductBinding()),
+  GetPage(
+      name: CartScreen.pageId,
+      page: () => CartScreen(),
+  binding: CartBinding()),
 ];
