@@ -373,10 +373,12 @@ class HomeScreen extends GetView<HomeController> {
                                             right: -1,
                                             bottom: -4,
                                             child: SizedBox(
-                                              width: Get.width*0.33,
+                                              width: Get.width * 0.33,
                                               child: Row(
                                                 //crossAxisAlignment: CrossAxisAlignment.start,
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
                                                   IconButton(
                                                       onPressed: () {
@@ -384,13 +386,40 @@ class HomeScreen extends GetView<HomeController> {
                                                             ProductScreen
                                                                 .pageId,
                                                             arguments: {
-                                                              'editProduct': controller.isEdit.value = true,
-                                                              'productId': getProduct[index].get("productID"),
-                                                              'proImage': getProduct[index].get("imageUrl"),
-                                                              'proName': getProduct[index].get("productName"),
-                                                              'proPrice': getProduct[index].get("price"),
-                                                              'proCategory': getProduct[index].get("category"),
-                                                              'proDescription': getProduct[index].get("description"),
+                                                              'editProduct':
+                                                                  controller
+                                                                          .isEdit
+                                                                          .value =
+                                                                      true,
+                                                              'productId':
+                                                                  getProduct[
+                                                                          index]
+                                                                      .get(
+                                                                          "productID"),
+                                                              'proImage':
+                                                                  getProduct[
+                                                                          index]
+                                                                      .get(
+                                                                          "imageUrl"),
+                                                              'proName': getProduct[
+                                                                      index]
+                                                                  .get(
+                                                                      "productName"),
+                                                              'proPrice':
+                                                                  getProduct[
+                                                                          index]
+                                                                      .get(
+                                                                          "price"),
+                                                              'proCategory':
+                                                                  getProduct[
+                                                                          index]
+                                                                      .get(
+                                                                          "category"),
+                                                              'proDescription':
+                                                                  getProduct[
+                                                                          index]
+                                                                      .get(
+                                                                          "description"),
                                                             });
                                                         //productView(context, getProduct[index]);
                                                       },
@@ -398,7 +427,6 @@ class HomeScreen extends GetView<HomeController> {
                                                         Icons.edit,
                                                         color: Colors.green,
                                                       )),
-
                                                   IconButton(
                                                       onPressed: () {
                                                         showDialog(
@@ -423,9 +451,16 @@ class HomeScreen extends GetView<HomeController> {
                                                                 ElevatedButton(
                                                                     onPressed:
                                                                         () {
-                                                                          controller.deleteProduct(context, getProduct[index]);
-                                                                      ScaffoldMessenger.of(context).showSnackBar(
-                                                                          const SnackBar(content: Text("Product delete Succesfully",)));
+                                                                      controller.deleteProduct(
+                                                                          context,
+                                                                          getProduct[
+                                                                              index]);
+                                                                      ScaffoldMessenger.of(
+                                                                              context)
+                                                                          .showSnackBar(const SnackBar(
+                                                                              content: Text(
+                                                                        "Product delete Succesfully",
+                                                                      )));
                                                                     },
                                                                     child: const Text(
                                                                         "Delete")),
@@ -442,17 +477,21 @@ class HomeScreen extends GetView<HomeController> {
                                               ),
                                             ))
                                         : const SizedBox(
-                                            width: 0,),
+                                            width: 0,
+                                          ),
                                   ],
                                 )),
                               ),
                               const SizedBox(
                                 height: 10,
                               ),
-                              dataList("Name : ", getProduct[index].get("productName")),
+                              dataList("Name : ",
+                                  getProduct[index].get("productName")),
                               //dataList("Description", getProduct[index].get("description")),
-                              dataList("Price : ", getProduct[index].get("price").toString()),
-                              dataList("Category : ", getProduct[index].get("category")),
+                              dataList("Price : ",
+                                  getProduct[index].get("price").toString()),
+                              dataList("Category : ",
+                                  getProduct[index].get("category")),
                               Text(
                                 "Description : ${getProduct[index].get("description")}",
                                 style: const TextStyle(
@@ -533,8 +572,7 @@ class HomeScreen extends GetView<HomeController> {
 
   //product display at cardView
   Future productView(context, product) {
-    return
-      showDialog(
+    return showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) {
@@ -564,30 +602,31 @@ class HomeScreen extends GetView<HomeController> {
                     Text("Category :  ${product.get("category")}"),
                     Text("Price :  ${product.get("price").toString()}"),
                     Text("Description :  ${product.get("description")}"),
-
-                    ElevatedButton(onPressed: (){
-                      FirebaseFirestore.instance.collection("cart").add(
-                          ProductResponse(
-                            productName:product.get("productName"),
-                            description: product.get("description"),
-                            price: product.get("price"),
-                            category: product.get("category"),
-                            imageUrl: product.get("imageUrl"),
-                            productID: product.get("productID").toString(),
-                          ).toMap()
-                      ).then((value) {
-                        value.set({"cartID" : value.id}, SetOptions(merge: true));
-                      });
-                      Get.offAndToNamed(CartScreen.pageId,
-                      );
-
-
-                    }, child: const Text("Add Cart")),
+                    ElevatedButton(
+                        onPressed: () {
+                          FirebaseFirestore.instance
+                              .collection("cart")
+                              .add(ProductResponse(
+                                productName: product.get("productName"),
+                                description: product.get("description"),
+                                price: product.get("price"),
+                                category: product.get("category"),
+                                imageUrl: product.get("imageUrl"),
+                                productID: product.get("productID").toString(),
+                              ).toMap())
+                              .then((value) {
+                            value.set(
+                                {"cartID": value.id}, SetOptions(merge: true));
+                          });
+                          Get.offAndToNamed(
+                            CartScreen.pageId,
+                          );
+                        },
+                        child: const Text("Add Cart")),
                   ],
                 ),
               ),
             ),
-
             Positioned(
               top: 0.0,
               right: 35.0,

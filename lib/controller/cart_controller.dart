@@ -39,6 +39,7 @@ class CartController extends BaseController{
     //
     // cartData.add(productId);
     print("cart Data: $cartData");
+    print("cart image: $imageUrl");
     //print("Product Id : ${productId.value}");
     super.onInit();
   }

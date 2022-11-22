@@ -26,24 +26,36 @@ class CartScreen extends GetView<CartController>{
                 children: [
                   Expanded(
                     child: ListView.builder(itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text("${controller.getCartData[index]['productName']}", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),),
-                        subtitle: Text("Price : ${controller.getCartData[index]['price']}"),
-                        trailing: TextButton(
-                          child:  Icon(Icons.delete),
-                          onPressed: (){
-                            //  print(FirebaseFirestore.instance.collection('cart').doc(controller.getCartData[index].get("cartID")));
-           print("object");
-                            controller.deleteCart(context, controller.getCartData[index]);
-                            //FirebaseFirestore.instance.collection('cart').doc(controller.getCartData[index].get("cartID").delete());
-                          },
+
+                      return Card(
+                        margin: EdgeInsets.only(top: 20),
+
+                        elevation: 5,
+                        color: Colors.grey[200],
+                        child: ListTile(
+                          leading: ClipRRect(
+                            child:  Image.network(
+                              controller.getCartData[index]
+                                  .get("imageUrl")
+                                  .toString(),
+                            )
+                          ),
+                          title: Text("${controller.getCartData[index]['productName']}", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),),
+                          subtitle: Text("Price : ${controller.getCartData[index]['price']}"),
+                          trailing: TextButton(
+                            child:  const Icon(Icons.delete),
+                            onPressed: (){
+                              controller.deleteCart(context, controller.getCartData[index]);
+                              //FirebaseFirestore.instance.collection('cart').doc(controller.getCartData[index].get("cartID").delete());
+                            },
+                          ),
                         ),
                       );
                     },
                       itemCount:controller.getCartData.length,
                     ),
                   ),
-                  Divider(),
+                  const Divider(),
                   Align(
                       alignment: Alignment.centerLeft,
                       child: Text("data", style: Theme.of(context).textTheme.headline2,)),
