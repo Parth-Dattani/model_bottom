@@ -5,6 +5,7 @@ class ProductResponse{
   String? category;
   String? imageUrl;
   String? productID;
+  int? quantity;
 
   ProductResponse({
     this.productName,
@@ -12,7 +13,8 @@ class ProductResponse{
     this.price,
     this.category,
     this.imageUrl,
-    this.productID
+    this.productID,
+    this.quantity
 });
 
   ProductResponse.fromMap(Map<String, dynamic>json){
@@ -22,6 +24,7 @@ class ProductResponse{
     category = json['category'];
     imageUrl = json['imageUrl'];
     productID = json['productID'];
+    quantity = json['quantity'];
   }
 
   Map<String, dynamic> toMap(){
@@ -31,7 +34,8 @@ class ProductResponse{
       'price' : price,
       'category' : category,
       'imageUrl' : imageUrl,
-      'productID' : productID
+      'productID' : productID,
+      'quantity' : quantity,
     };
   }
 }

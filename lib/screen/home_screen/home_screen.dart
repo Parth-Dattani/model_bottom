@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -370,10 +372,11 @@ class HomeScreen extends GetView<HomeController> {
                                         )),
                                     controller.role.value == "admin"
                                         ? Positioned(
-                                            right: -1,
+                                            right: -5,
+                                            //left: -,
                                             bottom: -4,
                                             child: SizedBox(
-                                              width: Get.width * 0.33,
+                                              // width: Get.width * 0.33,
                                               child: Row(
                                                 //crossAxisAlignment: CrossAxisAlignment.start,
                                                 mainAxisAlignment:
@@ -425,6 +428,7 @@ class HomeScreen extends GetView<HomeController> {
                                                       },
                                                       icon: const Icon(
                                                         Icons.edit,
+                                                        //size: ,
                                                         color: Colors.green,
                                                       )),
                                                   IconButton(
@@ -492,12 +496,14 @@ class HomeScreen extends GetView<HomeController> {
                                   getProduct[index].get("price").toString()),
                               dataList("Category : ",
                                   getProduct[index].get("category")),
-                              Text(
+                              dataList("Qty : ",
+                                  getProduct[index].get("quantity").toString()),
+                              /*Text(
                                 "Description : ${getProduct[index].get("description")}",
                                 style: const TextStyle(
                                     overflow: TextOverflow.ellipsis,
                                     fontWeight: FontWeight.w500),
-                              ),
+                              ),*/
                               dataList("", ""),
                             ],
                           ),
@@ -596,19 +602,48 @@ class HomeScreen extends GetView<HomeController> {
                   children: [
                     Image.network(
                       product.get("imageUrl").toString(),
-                      fit: BoxFit.fitHeight,
-                      height: Get.height * 0.4,
+                      fit: BoxFit.fill,
+                      height: Get.height * 0.5,
+                      width: Get.width,
                     ),
                     Text("Category :  ${product.get("category")}"),
                     Text("Price :  ${product.get("price").toString()}"),
                     Text("Description :  ${product.get("description")}"),
                     ElevatedButton(
-                        onPressed: () {
-                          FirebaseFirestore.instance
+                        onPressed: () async {
+                          print(
+                              "pid... ${product.get("productID").toString()}");
+
+                          // print("Cart --> pid... ${controller.s}");
+
+                          var value = await FirebaseFirestore.instance
                               .collection("cart")
+                              .get();
+
+                          for (int i = 0; i < value.docs.length; i++) {
+                            if (value.docs[i].get('productID') ==
+                                product.get("productID")) {
+                              print("Return");
+                              print(value.docs[i].get("quantity")+1);
+                              return;
+                            }
+                          }
+                          // value.docs.map((e) {
+                          //   print("cart product id: ${e.get('productID')}");
+                          //   if (e.get('productID') ==
+                          //       product.get("productID")) {
+                          //     print("Return");
+                          //     return;
+                          //   }
+                          // });
+
+                          print("Not Return");
+                          FirebaseFirestore.instance
+                              .collection('cart')
                               .add(ProductResponse(
                                 productName: product.get("productName"),
                                 description: product.get("description"),
+                                quantity: controller.quantity,
                                 price: product.get("price"),
                                 category: product.get("category"),
                                 imageUrl: product.get("imageUrl"),
@@ -618,6 +653,25 @@ class HomeScreen extends GetView<HomeController> {
                             value.set(
                                 {"cartID": value.id}, SetOptions(merge: true));
                           });
+
+
+                          /* .where(product.get("productID").toString()*/
+                          // FirebaseFirestore.instance.collection("products").doc(product.pr)
+                          // )
+                          //     .add(ProductResponse(
+                          //       productName: product.get("productName"),
+                          //       description: product.get("description"),
+                          //       quantity: controller.quantity,
+                          //       price: product.get("price"),
+                          //       category: product.get("category"),
+                          //       imageUrl: product.get("imageUrl"),
+                          //       productID: product.get("productID").toString(),
+                          //     ).toMap())
+                          //     .then((value) {
+                          //   value.set(
+                          //       {"cartID": value.id}, SetOptions(merge: true));
+                          // });
+                          //Get.back();
                           Get.offAndToNamed(
                             CartScreen.pageId,
                           );

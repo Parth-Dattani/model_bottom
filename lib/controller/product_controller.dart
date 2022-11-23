@@ -12,6 +12,7 @@ class ProductController extends BaseController {
   TextEditingController productNameController = TextEditingController();
   TextEditingController descController = TextEditingController();
   TextEditingController priceController = TextEditingController();
+  TextEditingController productQtyController = TextEditingController();
 
   final productFormKey = GlobalKey<FormState>();
 
@@ -67,6 +68,7 @@ class ProductController extends BaseController {
         .add(ProductResponse(
                     productName: productNameController.text,
                     description: descController.text,
+                    quantity: int.parse(productQtyController.text),
                     price: int.parse(priceController.text),
                     category: selectedItem.value.toString(),
                     imageUrl: imageUrl.value.toString())
@@ -112,6 +114,7 @@ class ProductController extends BaseController {
           .update(ProductResponse(
             productName: productNameController.text,
             description: descController.text,
+            quantity: int.parse(productQtyController.text),
             price: int.parse(priceController.text),
             category: selectedItem.value.toString(),
             imageUrl: imageUrl.value.toString(),

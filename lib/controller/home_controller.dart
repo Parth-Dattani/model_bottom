@@ -31,6 +31,8 @@ class HomeController extends BaseController {
   RxBool isAdmin = false.obs;
   Rxn<bool> isAdmin2 = Rxn<bool>();
 
+  int quantity = 1;
+
   @override
   void onInit() {
     super.onInit();
@@ -141,6 +143,9 @@ class HomeController extends BaseController {
   //     ).toMap()
   //   );
   // }
+
+// var s  =FirebaseFirestore.instance.collection('products').doc();
+  //var spgetProduct = snapshot.data!.docs;
 }
 
 class SelectDrawer {

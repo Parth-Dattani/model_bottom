@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:model_bottom/controller/base_controller.dart';
+import 'package:model_bottom/model/product_response.dart';
 
 class CartController extends BaseController{
 
@@ -11,6 +12,7 @@ class CartController extends BaseController{
 
   RxString productName = "".obs;
  // RxString productCategory = "".obs;
+
   RxString imageUrl = "".obs;
   RxString description = "".obs;
   RxString price = "".obs;
@@ -20,6 +22,18 @@ class CartController extends BaseController{
   var category = "".obs;
 
   RxList cartData = [].obs;
+
+
+  List<ProductResponse> newCartList = [];
+  List<ProductResponse> cartList = [];
+
+  //cartList = newCartList;
+  List<ProductResponse> get getCartList {
+    return cartList;
+  }
+  // int quantity =  1;
+  // Rxn<Int> quantity =  1.obs;
+  Rx<int> quantity = 1.obs;
 
   var getCartData;
 

@@ -164,6 +164,7 @@ class ProductScreen extends GetView<ProductController> {
                             return null;
                           },
                         ),
+
                         const SizedBox(
                           height: 20,
                         ),
@@ -198,34 +199,77 @@ class ProductScreen extends GetView<ProductController> {
                         const SizedBox(
                           height: 20,
                         ),
-                        TextFormField(
-                          controller: controller.priceController,
-                          decoration: InputDecoration(
-                            filled: true,
-                            // fillColor: Colors.white54,
-                            labelText: "Price",
-                            contentPadding: const EdgeInsets.only(
-                                left: 14.0, bottom: 8.0, top: 8.0),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.blue),
-                              borderRadius: BorderRadius.circular(20),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: Get.width/2.5,
+                              child: TextFormField(
+                                controller: controller.productQtyController,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  // fillColor: Colors.white54,
+                                  labelText: "Quantity",
+                                  contentPadding: const EdgeInsets.only(
+                                      left: 14.0, bottom: 8.0, top: 8.0),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(color: Colors.blue),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(color: Colors.black),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(color: Colors.red),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                ),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "please enter product Quantity";
+                                  }
+                                  return null;
+                                },
+                              ),
                             ),
-                            enabledBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.black),
-                              borderRadius: BorderRadius.circular(20),
+                            const Spacer(),
+                            SizedBox(
+                              width: Get.width/2.5,
+                              child: TextFormField(
+                                controller: controller.priceController,
+                                decoration: InputDecoration(
+                                  filled: true,
+                                  // fillColor: Colors.white54,
+                                  labelText: "Price",
+                                  contentPadding: const EdgeInsets.only(
+                                      left: 14.0, bottom: 8.0, top: 8.0),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(color: Colors.blue),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(color: Colors.black),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                    borderSide: const BorderSide(color: Colors.red),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                ),
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "please enter price";
+                                  }
+                                  return null;
+                                },
+                              ),
                             ),
-                            errorBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(color: Colors.red),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "please enter price";
-                            }
-                            return null;
-                          },
+                          ],
                         ),
+
+
+
+
                         const SizedBox(
                           height: 20,
                         ),
