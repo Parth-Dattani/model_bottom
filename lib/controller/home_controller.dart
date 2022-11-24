@@ -31,7 +31,9 @@ class HomeController extends BaseController {
   RxBool isAdmin = false.obs;
   Rxn<bool> isAdmin2 = Rxn<bool>();
 
-  int quantity = 1;
+  Rx<int> quantity = 1.obs;
+  Rx<String>   s = "".obs;
+
 
   @override
   void onInit() {
@@ -130,6 +132,17 @@ class HomeController extends BaseController {
     FirebaseStorage.instance.refFromURL(productIndex.get("imageUrl")).delete();
 
     Get.back();
+  }
+
+  void quantityUpdate(String qty) {
+    print("qrty : ${qty}");
+    FirebaseFirestore.instance
+        .collection("cart")
+        .doc("cartID")
+        .update({
+      //"quantity": quantity.value,
+      "quantity": qty,
+    });
   }
 
   // Future addToCart() async {

@@ -48,4 +48,8 @@ final List<GetPage> appPage = [
       name: CartScreen.pageId,
       page: () => CartScreen(),
   binding: CartBinding()),
+  GetPage(
+      name: CheckOutScreen.pageID,
+      page: () => CheckOutScreen(),
+  binding: CheckOutBindings())
 ];

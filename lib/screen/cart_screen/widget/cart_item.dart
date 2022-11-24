@@ -124,7 +124,9 @@ class _CartItemState extends State<CartItem> {
                              children: [
                                CommonButton(
                                  color: Colors.grey[300],
-                                 icon: Icons.remove,
+                                 height: 30,
+                                 width: 40,
+                                 child: Icon(Icons.remove),
                                  onPressed: () {
                                    if (quantity > 1) {
                                      setState(() {
@@ -143,13 +145,15 @@ class _CartItemState extends State<CartItem> {
                                ),
                                CommonButton(
                                  color: Colors.grey[300],
-                                 icon: Icons.add,
+                                 height: 30,
+                                 width: 40,
                                  onPressed: () {
                                    setState(() {
                                      quantity++;
                                      quantityUpdate();
                                    });
                                  },
+                                 child: Icon(Icons.add),
                                ),
                              ],
                            )

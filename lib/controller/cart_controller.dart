@@ -58,6 +58,8 @@ class CartController extends BaseController{
     super.onInit();
   }
 
+
+  //delete a cart Item
   Future deleteCart(context, cartIndex) async {
     await FirebaseFirestore.instance
         .collection("cart")
@@ -65,6 +67,5 @@ class CartController extends BaseController{
         .delete();
 
   }
-
 
 }

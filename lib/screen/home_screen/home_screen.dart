@@ -611,20 +611,22 @@ class HomeScreen extends GetView<HomeController> {
                     Text("Description :  ${product.get("description")}"),
                     ElevatedButton(
                         onPressed: () async {
-                          print(
-                              "pid... ${product.get("productID").toString()}");
-
-                          // print("Cart --> pid... ${controller.s}");
-
+                          print("pid... ${product.get("productID").toString()}");
                           var value = await FirebaseFirestore.instance
                               .collection("cart")
                               .get();
 
                           for (int i = 0; i < value.docs.length; i++) {
-                            if (value.docs[i].get('productID') ==
-                                product.get("productID")) {
+                            if (value.docs[i].get('productID') == product.get("productID")) {
                               print("Return");
-                              print(value.docs[i].get("quantity")+1);
+                             //controller.s.value = controller.quantity.value.toString();
+//                             controller.s.value = value.docs[i].get("quantity")+1;
+                              //print(controller.quantity.value);
+                              //print("S quantity value : ${controller.s.toString()}");
+
+                              //controller.quantityUpdate(controller.s.value.toString());
+                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Item already in your cart")));
+                              Get.back();
                               return;
                             }
                           }
@@ -643,7 +645,7 @@ class HomeScreen extends GetView<HomeController> {
                               .add(ProductResponse(
                                 productName: product.get("productName"),
                                 description: product.get("description"),
-                                quantity: controller.quantity,
+                                quantity: controller.quantity.value,
                                 price: product.get("price"),
                                 category: product.get("category"),
                                 imageUrl: product.get("imageUrl"),
@@ -672,9 +674,10 @@ class HomeScreen extends GetView<HomeController> {
                           //       {"cartID": value.id}, SetOptions(merge: true));
                           // });
                           //Get.back();
-                          Get.offAndToNamed(
-                            CartScreen.pageId,
-                          );
+                          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Item's are added in your cart")));
+                          Get.back();
+                          //Get.offAndToNamed(CartScreen.pageId,);
+
                         },
                         child: const Text("Add Cart")),
                   ],
