@@ -26,23 +26,22 @@ class CartScreen extends GetView<CartController> {
         actions: [
           IconButton(
               onPressed: () {
-                int total = 0;
-                int subTotal = 0;
+
                 print("object:${controller.getCartData.length}");
                 for (int i = 0; i <= controller.getCartData.length - 1; i++) {
                   print("============================================");
                   print("Item ${i + 1}: ");
                   print("price:${controller.getCartData[i]['price']}");
                   print("Qty:${controller.getCartData[i]['quantity']}");
-                  total = controller.getCartData[i]['quantity'] *
+                  controller.total = controller.getCartData[i]['quantity'] *
                       controller.getCartData[i]['price'];
-                  subTotal += total;
-                  print("total: $total");
+                  controller.subTotal += controller.total;
+                  print("total: $controller.total");
                   // tot =  controller.getCartData[i]['quantity'] * controller.getCartData[i]['price'];
                   // print(tot);
                 }
                 print("============================================");
-                print("Sub Total : ${subTotal}");
+                print("Sub Total : ${controller.subTotal}");
                 print("============================================");
               },
               icon: Icon(Icons.check))
@@ -114,7 +113,8 @@ class CartScreen extends GetView<CartController> {
                                     'price': controller.getCartData[1]['price'],
                                     'qty': controller.getCartData[1]['quantity'],
                                     'total' : controller.getCartData[1]['quantity'] *
-                                        controller.getCartData[1]['price']
+                                        controller.getCartData[1]['price'],
+                                    'subTotal' : controller.subTotal
                                   }
                                   );
                                 },

@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ProductResponse{
   String? productName;
   String? description;
@@ -26,6 +28,8 @@ class ProductResponse{
     productID = json['productID'];
     quantity = json['quantity'];
   }
+
+
 
   Map<String, dynamic> toMap(){
     return{

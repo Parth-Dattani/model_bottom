@@ -14,10 +14,12 @@ class CheckOutController extends BaseController{
     price = Get.arguments['price'];
     qty = Get.arguments['qty'];
     total = Get.arguments['total'];
+    subTotal = Get.arguments['subTotal'];
 
     print("price from Cart page : $price");
     print("qty from Cart page : $qty");
     print("total from Cart page : $total");
+    print("Subtotal from Cart page : $subTotal");
     super.onInit();
   }
 

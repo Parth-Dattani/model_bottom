@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:model_bottom/constant/color_config.dart';
 import 'package:model_bottom/controller/controller.dart';
 import 'package:model_bottom/screen/register_screen/register_screen.dart';
 
 class LoginScreen extends GetView<LoginController>{
   static const pageId = '/loginScreen';
+
+  const LoginScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Login")),
+      appBar: AppBar(title: Text("Login"),elevation: 0,),
       body: Padding(
         padding: const EdgeInsets.all(18.0),
         child: Form(
@@ -18,11 +21,11 @@ class LoginScreen extends GetView<LoginController>{
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Login", style: TextStyle(fontWeight: FontWeight.w700,fontSize: 26,
+              const Text("Login", style: TextStyle(fontWeight: FontWeight.w700,fontSize: 26,
               decorationStyle: TextDecorationStyle.dashed,
                 decorationColor: Colors.red
               ),),
-              SizedBox(height: 10,),
+              const SizedBox(height: 10,),
               TextFormField(
                 controller: controller.emailController,
                 decoration: InputDecoration(
@@ -45,6 +48,7 @@ class LoginScreen extends GetView<LoginController>{
                 decoration: const InputDecoration(
                   labelText: "enter password",
                 ),
+
                 validator: (value){
                   if(value!.isEmpty){
                     return "please enter password";
@@ -57,13 +61,20 @@ class LoginScreen extends GetView<LoginController>{
               ),
               const SizedBox(height: 15,),
               ElevatedButton(onPressed: () {
+
                 controller.loginWithValidation();
               },
-                  child: Text("Login")),
+                  child: const Text("Login")),
               const SizedBox(height: 5,),
               TextButton(onPressed: (){
                 Get.toNamed(RegisterScreen.pageId);
-              }, child: Text("Don't have a account? Register"))
+              }, child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const[
+                  Text("Don't have a account? ", style: TextStyle(color: ColorConfig.colorBlack,fontSize: 15),),
+                  Text("Register", style: TextStyle(color: ColorConfig.colorLightBlue,fontSize: 18),),
+                ],
+              ))
 
             ],
         ),

@@ -13,12 +13,18 @@ class CommonAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return  AppBar(
 
-      title: Text(title.toString()),
-      leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-      icon: leadingIcon!),
+      title: Text(title!),
+      centerTitle: true,
+      backgroundColor: Colors.red[50],
+      elevation: 0.0,
+      automaticallyImplyLeading: false,
+      iconTheme: IconThemeData(color: Colors.redAccent),
+      leading: leadingIcon,
+      // leading: IconButton(
+      //     onPressed: () {
+      //       Get.back();
+      //     },
+      // icon: leadingIcon!),
     actions: [
 
     ],

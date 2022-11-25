@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:model_bottom/constant/color_config.dart';
 import 'package:model_bottom/controller/controller.dart';
 
-import '../login_screen/login_screen.dart';
 
 class RegisterScreen extends GetView<RegisterController> {
   static const pageId = '/RegisterScreen';
+
+  const RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class RegisterScreen extends GetView<RegisterController> {
                       decorationColor: Colors.red),
                 ),
 
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
 
@@ -49,11 +50,11 @@ class RegisterScreen extends GetView<RegisterController> {
                     contentPadding: const EdgeInsets.only(
                         left: 14.0, bottom: 8.0, top: 8.0),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
+                      borderSide: const BorderSide(color: Colors.black),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
+                      borderSide: const BorderSide(color: Colors.black),
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
@@ -64,7 +65,7 @@ class RegisterScreen extends GetView<RegisterController> {
                     return null;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 TextFormField(
@@ -75,11 +76,11 @@ class RegisterScreen extends GetView<RegisterController> {
                     contentPadding: const EdgeInsets.only(
                         left: 14.0, bottom: 8.0, top: 8.0),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
+                      borderSide: const BorderSide(color: Colors.black),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black),
+                      borderSide: const BorderSide(color: Colors.black),
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
@@ -92,7 +93,7 @@ class RegisterScreen extends GetView<RegisterController> {
                     return null;
                   },
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 TextFormField(
@@ -104,11 +105,11 @@ class RegisterScreen extends GetView<RegisterController> {
                       contentPadding: const EdgeInsets.only(
                           left: 14.0, bottom: 8.0, top: 8.0),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black),
+                        borderSide: const BorderSide(color: Colors.black),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black),
+                        borderSide: const BorderSide(color: Colors.black),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       suffixIcon: IconButton(
@@ -129,7 +130,7 @@ class RegisterScreen extends GetView<RegisterController> {
                       }
                       return null;
                     }),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 TextFormField(
@@ -141,11 +142,11 @@ class RegisterScreen extends GetView<RegisterController> {
                       contentPadding: const EdgeInsets.only(
                           left: 14.0, bottom: 8.0, top: 8.0),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black26),
+                        borderSide: const BorderSide(color: Colors.black26),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black),
+                        borderSide: const BorderSide(color: Colors.black),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       suffixIcon: IconButton(
@@ -170,22 +171,22 @@ class RegisterScreen extends GetView<RegisterController> {
                       return null;
                     }),
 
-                SizedBox(height: 15,),
+                const SizedBox(height: 15,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       "Role : ",
                       style: TextStyle(fontSize: 15),
                     ),
                     DropdownButton<String>(
                       items: controller.roleList.map((String items) {
                         return DropdownMenuItem<String>(
+                          value: items.toString(),
                           child: Text(
                             items,
-                            style: TextStyle(fontSize: 15),
+                            style: const TextStyle(fontSize: 15),
                           ),
-                          value: items.toString(),
                         );
                       }).toList(),
                       onChanged: (value) {
@@ -216,7 +217,14 @@ class RegisterScreen extends GetView<RegisterController> {
                   onPressed: () {
                     Get.back();
                   },
-                  child: Text("already have an account? Login"),
+                  child:
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const[
+                      Text("already have an account? ", style: TextStyle(color: ColorConfig.colorBlack,fontSize: 15),),
+                      Text("Login", style: TextStyle(fontSize: 18, color: ColorConfig.colorLightBlue),),
+                    ],
+                  ),
                 ),
               ],
             ),

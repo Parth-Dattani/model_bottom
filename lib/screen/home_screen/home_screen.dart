@@ -366,8 +366,7 @@ class HomeScreen extends GetView<HomeController> {
                                         )
                                             :*/
                                             Image.network(
-                                          getProduct[index]
-                                              .get("imageUrl")
+                                          getProduct[index].get("imageUrl")
                                               .toString(),
                                         )),
                                     controller.role.value == "admin"

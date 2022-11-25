@@ -36,6 +36,8 @@ class CartController extends BaseController{
   Rx<int> quantity = 1.obs;
 
   var getCartData;
+  int total = 0;
+  int subTotal = 0;
 
   void onInit() {
     //clearController();
