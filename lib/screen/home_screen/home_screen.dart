@@ -644,7 +644,7 @@ class HomeScreen extends GetView<HomeController> {
                               .collection('cart')
                               .doc(FirebaseAuth.instance.currentUser!.uid)
                               .collection('cart_2')
-                              .doc(product.get("productID").toString(),)
+                              .doc(product.get("productID"),)
                               .set(ProductResponse(
                                 productName: product.get("productName"),
                                 description: product.get("description"),

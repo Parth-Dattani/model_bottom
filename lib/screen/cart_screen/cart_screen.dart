@@ -57,9 +57,8 @@ class CartScreen extends GetView<CartController> {
         child: StreamBuilder(
           stream: FirebaseFirestore.instance.collection('cart')
               .doc(FirebaseAuth.instance.currentUser!.uid)
-              .collection('cart_2').
-
-          snapshots(),
+              .collection('cart_2')
+              .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasData) {

@@ -60,7 +60,8 @@ class _CartItemState extends State<CartItem> {
     return StreamBuilder(
       stream: FirebaseFirestore.instance.collection("cart")
           .doc(FirebaseAuth.instance.currentUser!.uid)
-          .collection('cart_2')
+        .collection('cart_2')
+
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
 
