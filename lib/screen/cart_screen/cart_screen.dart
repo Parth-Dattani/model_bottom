@@ -49,8 +49,8 @@ class CartScreen extends GetView<CartController> {
       ),
       body:
           // controller.getCartData == null
-          //     ? Center(
-          //   child: Text("No Product"),
+          //     ? const Center(
+          //   child: Text("Your Cart is empty"),
           // )
           //     :
           SafeArea(
@@ -66,7 +66,7 @@ class CartScreen extends GetView<CartController> {
               return Column(
                 children: [
                   Expanded(
-                    child: ListView.builder(
+                    child:  ListView.builder(
                       itemBuilder: (context, index) {
                         return CartItem(
                           index: index,

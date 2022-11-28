@@ -65,10 +65,17 @@ class ProductScreen extends GetView<ProductController> {
                                       borderRadius:
                                           const BorderRadius.all(Radius.zero),
                                       child: controller.isEdit.value == true
-                                          ? Image.network(
-                                              controller.imageUrl.toString(),
-                                              fit: BoxFit.fill,
-                                            )
+                                          ? controller.pickedImage.value == null
+                                              ? Image.network(
+                                                  controller.imageUrl
+                                                      .toString(),
+                                                  fit: BoxFit.fill,
+                                                )
+                                              : Image.file(
+                                                  File(controller
+                                                      .pickedImage.value!.path),
+                                                  fit: BoxFit.fill,
+                                                )
                                           : controller.pickedImage.value != null
                                               ? Image.file(
                                                   File(controller
@@ -79,34 +86,43 @@ class ProductScreen extends GetView<ProductController> {
                                                   ImagePath.imageLogo,
                                                   fit: BoxFit.fill,
                                                 ))),
-                              controller.isUpload.value == true
-                                  ? Positioned(
-                                      bottom: 2,
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          controller.selectImage();
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(18.0),
-                                              side: const BorderSide(
-                                                  color: Colors.blue)),
-                                          elevation: 5.0,
-                                          backgroundColor: Colors.blue,
-                                          textStyle: const TextStyle(
-                                              color: Colors.white),
-                                          //padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
-                                          //splashColor: Colors.grey,
-                                          minimumSize: const Size(90, 25),
-                                        ),
-                                        child: const Text("Upload Image",
+                              Positioned(
+                                  bottom: 2,
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      print("picked ing");
+                                      print(
+                                          controller.pickedImage.value != null);
+                                      controller.selectImage();
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(18.0),
+                                          side: const BorderSide(
+                                              color: Colors.blue)),
+                                      elevation: 5.0,
+                                      backgroundColor: Colors.blue,
+                                      textStyle:
+                                          const TextStyle(color: Colors.white),
+                                      //padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
+                                      //splashColor: Colors.grey,
+                                      minimumSize: const Size(90, 25),
+                                    ),
+                                    child: controller.isUpload.value == true &&
+                                            controller.imageUrl.value.isEmpty
+                                        ? const Text("Upload Image",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ))
+                                        : const Text("Edit Image",
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold,
                                             )),
-                                      ))
-                                  : Positioned(
+                                  ))
+                              /*: Positioned(
                                       bottom: 2,
                                       right: 20,
                                       child: ElevatedButton(
@@ -128,7 +144,7 @@ class ProductScreen extends GetView<ProductController> {
                                             icon: const Icon(Icons.edit),
                                             onPressed: () {},
                                           )),
-                                    ),
+                                    ),*/
                             ],
                           ),
                         ),
@@ -202,7 +218,7 @@ class ProductScreen extends GetView<ProductController> {
                         Row(
                           children: [
                             SizedBox(
-                              width: Get.width/2.5,
+                              width: Get.width / 2.5,
                               child: TextFormField(
                                 controller: controller.productQtyController,
                                 decoration: InputDecoration(
@@ -212,15 +228,18 @@ class ProductScreen extends GetView<ProductController> {
                                   contentPadding: const EdgeInsets.only(
                                       left: 14.0, bottom: 8.0, top: 8.0),
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.blue),
+                                    borderSide:
+                                        const BorderSide(color: Colors.blue),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.black),
+                                    borderSide:
+                                        const BorderSide(color: Colors.black),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   errorBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.red),
+                                    borderSide:
+                                        const BorderSide(color: Colors.red),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                 ),
@@ -234,7 +253,7 @@ class ProductScreen extends GetView<ProductController> {
                             ),
                             const Spacer(),
                             SizedBox(
-                              width: Get.width/2.5,
+                              width: Get.width / 2.5,
                               child: TextFormField(
                                 controller: controller.priceController,
                                 decoration: InputDecoration(
@@ -244,15 +263,18 @@ class ProductScreen extends GetView<ProductController> {
                                   contentPadding: const EdgeInsets.only(
                                       left: 14.0, bottom: 8.0, top: 8.0),
                                   focusedBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.blue),
+                                    borderSide:
+                                        const BorderSide(color: Colors.blue),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   enabledBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.black),
+                                    borderSide:
+                                        const BorderSide(color: Colors.black),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   errorBorder: OutlineInputBorder(
-                                    borderSide: const BorderSide(color: Colors.red),
+                                    borderSide:
+                                        const BorderSide(color: Colors.red),
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                 ),
@@ -266,9 +288,6 @@ class ProductScreen extends GetView<ProductController> {
                             ),
                           ],
                         ),
-
-
-
 
                         const SizedBox(
                           height: 20,
@@ -328,31 +347,30 @@ class ProductScreen extends GetView<ProductController> {
                             ),
                           ),
                         ),
-                       const SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         ElevatedButton(
                           onPressed: () {
-
-
-                          if (controller.productFormKey.currentState!.validate() /* &&  controller.pickedImage.value != null*/) {
-
-                            if(controller.selectedItem.value.isNotEmpty) {
-                              controller.loader.value = true;
-                              controller.isEdit.value == true
-                                  ? controller.updateProduct()
-                                  : controller.addProduct(context);
+                            if (controller.productFormKey.currentState!
+                                .validate() /* &&  controller.pickedImage.value != null*/) {
+                              if (controller.selectedItem.value.isNotEmpty) {
+                                controller.loader.value = true;
+                                controller.isEdit.value == true
+                                    ? controller.updateProduct()
+                                    : controller.addProduct(context);
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                        content: Text(
+                                  "Please select a Category",
+                                )));
+                              }
                             }
-                            else{
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text("Please select a Category" ,)));
-                            }
-                          }
-                         /* else{
+                            /* else{
                             ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text("Please select a Product Image" ,)));
                           }*/
-
                           },
                           style: ElevatedButton.styleFrom(
                             shape: const StadiumBorder(),
@@ -370,8 +388,7 @@ class ProductScreen extends GetView<ProductController> {
           controller.loader.value
               ? const Opacity(
                   opacity: 0.6,
-                  child: ModalBarrier(
-                      dismissible: false, color: Colors.grey))
+                  child: ModalBarrier(dismissible: false, color: Colors.grey))
               : const SizedBox(),
           controller.loader.value
               ? const Center(

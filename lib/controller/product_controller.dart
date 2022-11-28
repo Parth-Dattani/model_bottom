@@ -36,11 +36,13 @@ class ProductController extends BaseController {
   @override
   void onInit() {
     clearController();
+    // print("Check path value: ${pickedImage.value!.path}");
     isEdit.value = Get.arguments['editProduct'];
     imageUrl.value = Get.arguments['proImage'].toString();
     productId.value = Get.arguments['productId'].toString();
     productNameController.text = Get.arguments['proName'].toString();
     priceController.text = Get.arguments['proPrice'].toString();
+    productQtyController.text = Get.arguments['proQuantity'].toString();
     selectedItem.value = Get.arguments['proCategory'].toString();
     descController.text = Get.arguments['proDescription'].toString();
     print(Get.arguments['proImage']);
@@ -108,17 +110,19 @@ class ProductController extends BaseController {
     //loader.value = true;
     productFormKey.currentState!.save();
     if (productFormKey.currentState!.validate()) {
+      await uploadImage();
       FirebaseFirestore.instance
           .collection("products")
           .doc(productId.value)
           .update(ProductResponse(
-            productName: productNameController.text,
-            description: descController.text,
-            quantity: int.parse(productQtyController.text),
-            price: int.parse(priceController.text),
-            category: selectedItem.value.toString(),
-            imageUrl: imageUrl.value.toString(),
-          ).toMap());
+                  productName: productNameController.text,
+                  description: descController.text,
+                  quantity: int.parse(productQtyController.text),
+                  price: int.parse(priceController.text),
+                  category: selectedItem.value.toString(),
+                  imageUrl: imageUrl.value.toString(),
+                  productID: productId.value)
+              .toMap());
       Future.delayed(const Duration(seconds: 5), () {
         Get.back();
         loader.value = false;
@@ -138,16 +142,18 @@ class ProductController extends BaseController {
   Future selectImage() async {
     pickedImage.value =
         await imagePicker.pickImage(source: ImageSource.gallery);
-    if (pickedImage.value != null) {
-      print('picked Image path: ${pickedImage.value!.path} ');
-      productImg.value = pickedImage.value!.path;
-      isUpload.value = false;
-    }
+
+    //if (pickedImage.value != null) {
+    print('picked Image path: ${pickedImage.value!.path} ');
+    imageUrl.value = pickedImage.value!.path;
+    isUpload.value = false;
+    //}
   }
 
   Future uploadImage() async {
     print("loader value sd:  ${loader.value.toString()} ");
-    final path = 'productImages/${productNameController.value.text} ${DateTime.now()}';
+    final path =
+        'productImages/${productNameController.value.text} ${DateTime.now()}';
     print(path);
     final file = File(pickedImage.value!.path);
     print("File $file");
