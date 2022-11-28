@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
@@ -55,7 +56,11 @@ class CartScreen extends GetView<CartController> {
           //     :
           SafeArea(
         child: StreamBuilder(
-          stream: FirebaseFirestore.instance.collection('cart').snapshots(),
+          stream: FirebaseFirestore.instance.collection('cart')
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .collection('cart_2').
+
+          snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasData) {
@@ -77,7 +82,7 @@ class CartScreen extends GetView<CartController> {
                           //productQuantity: controller.getCartData[index]["quantity"],
                           productName: controller.getCartData[index]
                               ['productName'],
-                          cartId: controller.getCartData[index]['cartID'],
+                          //cartId: controller.getCartData[index]['cartID'],
                         );
                       },
                       itemCount: controller.getCartData.length,

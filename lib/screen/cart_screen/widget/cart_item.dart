@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:model_bottom/widgets/common_button.dart';
 
 class CartItem extends StatefulWidget {
@@ -12,7 +13,7 @@ class CartItem extends StatefulWidget {
   final int productQuantity;
   final String productCategory;
   final String productId;
-  final String cartId;
+  final String? cartId;
   final int index;
 
   const CartItem({
@@ -24,7 +25,7 @@ class CartItem extends StatefulWidget {
     required this.productQuantity,
     required this.productName,
     required this.index,
-    required this.cartId,
+    this.cartId,
   }) : super(key: key);
 
   @override
@@ -32,12 +33,14 @@ class CartItem extends StatefulWidget {
 }
 
 class _CartItemState extends State<CartItem> {
-  int quantity = 1;
+  Rx<int> quantity = 1.obs;
 
   void quantityUpdate() {
     FirebaseFirestore.instance
         .collection("cart")
-        .doc(widget.cartId)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('cart_2')
+        .doc(widget.productId)
         .update({
       "quantity": quantity,
     });
@@ -51,7 +54,10 @@ class _CartItemState extends State<CartItem> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection("cart").snapshots(),
+      stream: FirebaseFirestore.instance.collection("cart")
+          .doc(FirebaseAuth.instance.currentUser!.uid)
+          .collection('cart_2')
+          .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
 
         if(snapshot.hasData){
@@ -130,15 +136,19 @@ class _CartItemState extends State<CartItem> {
                                  onPressed: () {
                                    if (quantity > 1) {
                                      setState(() {
-                                       quantity--;
+                                       quantity.value--;
                                        quantityUpdate();
+                                       print("===+=++===+++++==++++INDex");
+                                       print(widget.index);
                                      });
                                    }
                                  },
                                ),
+
+                               ///count text
                                Text(
-                                 getCartData[widget.index]['quantity'].toString(),
-                                 //widget.productQuantity.toString(),
+                                //getCartData[widget.index]['quantity'].toString(),
+                                 widget.productQuantity.toString(),
                                  style: TextStyle(
                                    fontSize: 18,
                                  ),
@@ -149,7 +159,9 @@ class _CartItemState extends State<CartItem> {
                                  width: 40,
                                  onPressed: () {
                                    setState(() {
-                                     quantity++;
+                                     quantity.value++;
+                                     print("===+=++===+++++==++++INDex");
+                                     print(widget.index);
                                      quantityUpdate();
                                    });
                                  },
@@ -176,8 +188,7 @@ class _CartItemState extends State<CartItem> {
       );
 
       },
-      
-      
+
     );
   }
 }

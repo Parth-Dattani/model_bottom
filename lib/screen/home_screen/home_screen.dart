@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:model_bottom/constant/image_path.dart';
@@ -641,7 +642,10 @@ class HomeScreen extends GetView<HomeController> {
                           print("Not Return");
                           FirebaseFirestore.instance
                               .collection('cart')
-                              .add(ProductResponse(
+                              .doc(FirebaseAuth.instance.currentUser!.uid)
+                              .collection('cart_2')
+                              .doc(product.get("productID").toString(),)
+                              .set(ProductResponse(
                                 productName: product.get("productName"),
                                 description: product.get("description"),
                                 quantity: controller.quantity.value,
@@ -649,11 +653,11 @@ class HomeScreen extends GetView<HomeController> {
                                 category: product.get("category"),
                                 imageUrl: product.get("imageUrl"),
                                 productID: product.get("productID").toString(),
-                              ).toMap())
-                              .then((value) {
-                            value.set(
-                                {"cartID": value.id}, SetOptions(merge: true));
-                          });
+                              ).toMap());
+                          //     .then((value) {
+                          //   value.set(
+                          //       {"cartID": value.id}, SetOptions(merge: true));
+                          // });
 
 
                           /* .where(product.get("productID").toString()*/
