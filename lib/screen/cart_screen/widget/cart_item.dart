@@ -42,13 +42,17 @@ class _CartItemState extends State<CartItem> {
         .collection('cart_2')
         .doc(widget.productId)
         .update({
-      "quantity": quantity,
+      "quantity": quantity.value,
     });
   }
 
 
-  Future deleteCart(context, cartId) async {
-    await FirebaseFirestore.instance.collection("cart").doc(cartId).delete();
+  Future deleteCart(context, productId) async {
+    await FirebaseFirestore.instance.collection("cart")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection('cart_2')
+        .doc(widget.productId)
+        .delete();
   }
 
   @override
@@ -81,7 +85,7 @@ class _CartItemState extends State<CartItem> {
                IconButton(
                  onPressed: () async {
                    print("Index of : ${widget.index}");
-                   await deleteCart(context, widget.cartId);
+                   await deleteCart(context, widget.productId);
                  },
                  icon: Icon(
                    Icons.delete,
@@ -119,7 +123,6 @@ class _CartItemState extends State<CartItem> {
                              widget.productCategory,
                            ),
                            Text(
-
                              "\₹ ${widget.productPrice}",
                              style: TextStyle(
                                fontWeight: FontWeight.bold,
@@ -134,12 +137,14 @@ class _CartItemState extends State<CartItem> {
                                  width: 40,
                                  child: Icon(Icons.remove),
                                  onPressed: () {
-                                   if (quantity > 1) {
+                                   if (quantity.value > 1) {
                                      setState(() {
                                        quantity.value--;
                                        quantityUpdate();
                                        print("===+=++===+++++==++++INDex");
                                        print(widget.index);
+                                       print("===+=++===+++++==++++Qty val");
+                                       print(quantity.value);
                                      });
                                    }
                                  },
@@ -147,8 +152,8 @@ class _CartItemState extends State<CartItem> {
 
                                ///count text
                                Text(
-                                //getCartData[widget.index]['quantity'].toString(),
-                                 widget.productQuantity.toString(),
+                                getCartData[widget.index]['quantity'].toString(),
+                                // widget.productQuantity.toString(),
                                  style: TextStyle(
                                    fontSize: 18,
                                  ),
@@ -162,6 +167,8 @@ class _CartItemState extends State<CartItem> {
                                      quantity.value++;
                                      print("===+=++===+++++==++++INDex");
                                      print(widget.index);
+                                     print("===+=++===+++++==++++Qty val");
+                                     print(quantity.value);
                                      quantityUpdate();
                                    });
                                  },
