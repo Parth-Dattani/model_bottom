@@ -8,6 +8,7 @@ import 'package:model_bottom/constant/image_path.dart';
 import 'package:model_bottom/controller/controller.dart';
 import 'package:model_bottom/model/product_response.dart';
 import 'package:model_bottom/screen/cart_screen/cart_screen.dart';
+import 'package:model_bottom/screen/cart_screen/widget/cart_item.dart';
 import 'package:model_bottom/screen/product_screen/product_screen.dart';
 
 import '../../constant/text_style.dart';
@@ -40,11 +41,11 @@ class HomeScreen extends GetView<HomeController> {
                 ],
               ),
         body: SafeArea(
+
           child: StreamBuilder(
               stream: usersStream,
               // FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.uid).snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
+              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
                 // if (snapshot.connectionState == ConnectionState.waiting) {
                 //   return CircularProgressIndicator();
                 // }
@@ -54,6 +55,30 @@ class HomeScreen extends GetView<HomeController> {
                     () => SingleChildScrollView(
                       child: Column(
                         children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Material(
+                              elevation: 7,
+                              shadowColor: Colors.grey[300],
+                              child: TextFormField(
+                                onChanged: (value) {
+                                //  setState(() {
+                                    controller.query.value = value;
+                                 // });
+                                },
+                                decoration: const InputDecoration(
+                                  prefixIcon: Icon(Icons.search),
+                                  fillColor: Colors.white,
+                                  hintText: "Search Your Product",
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                    borderSide: BorderSide.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+
                           controller.userName.value.isEmpty &&
                                   controller.email.value.isEmpty
                               ? const Center(child: CircularProgressIndicator())
@@ -332,7 +357,9 @@ class HomeScreen extends GetView<HomeController> {
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasData) {
           getProduct = snapshot.data!.docs;
-          return Padding(
+          return
+            controller.query.value == ""?
+            Padding(
             padding: const EdgeInsets.only(top: 15.0),
             child: GridView.builder(
               itemBuilder: (context, index) {
@@ -519,10 +546,210 @@ class HomeScreen extends GetView<HomeController> {
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
             ),
-          );
-        } else if (snapshot.hasError || snapshot.data == null) {
-          return Text("something is wrong : ${snapshot.error}");
-        } else if (snapshot.connectionState == ConnectionState.waiting) {
+          )
+          : SizedBox(
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection("products")
+                    .snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+
+                  var varData = controller.searchProduct(controller.query.value, snapshot.data?.docs);
+                  return controller.result.isEmpty
+                      ? Container(child: const Center(child: Text("Not Found")))
+                      : GridView.builder(
+                    shrinkWrap: true,
+                    itemCount: controller.result.length,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 15,
+                      mainAxisSpacing: 18,
+                      childAspectRatio: 0.65
+                    // childAspectRatio: MediaQuery.of(context).size.width /
+                    // (MediaQuery.of(context).size.height / 1.4),
+                  ),
+                    itemBuilder: (ctx, index) {
+                      var data = varData[index];
+                      // return CartItem(
+                      //   productId: data["productID"],
+                      //   productCategory: data["category"],
+                      //   productPrice: data["price"],
+                      //   productImage: data["imageUrl"],
+                      //   productName: data["productName"],
+                      //   productQuantity: data["quantity"],
+                      //   index: index,
+                      // );
+                      return Column(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                productView(context, getProduct[index]);
+                                },
+                              child: Card(
+
+                                elevation: 5,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    SizedBox(
+                                        width: 200,
+                                        height: 150,
+                                        child: Stack(
+                                          children: [
+                                            ClipRRect(
+                                                borderRadius: const BorderRadius.all(
+                                                    Radius.circular(15)),
+                                                child:
+
+                                                Center(
+                                                  child: Image.network(
+                                                    data["imageUrl"],
+                                                    // getProduct[index].get("imageUrl")
+                                                    //     .toString(),
+                                                  ),
+                                                )),
+                                            controller.role.value == "admin"
+                                                ? Positioned(
+                                              bottom: -4,
+                                              right: 45,
+                                              child: Row(
+                                                //crossAxisAlignment: CrossAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  IconButton(
+                                                      onPressed: () {
+                                                        Get.toNamed(
+                                                            ProductScreen
+                                                                .pageId,
+                                                            arguments: {
+                                                              'editProduct':
+                                                              controller
+                                                                  .isEdit
+                                                                  .value =
+                                                              true,
+                                                              'productId':
+                                                              getProduct[
+                                                              index]
+                                                                  .get(
+                                                                  "productID"),
+                                                              'proImage':
+                                                              getProduct[
+                                                              index]
+                                                                  .get(
+                                                                  "imageUrl"),
+                                                              'proName': getProduct[
+                                                              index]
+                                                                  .get(
+                                                                  "productName"),
+                                                              'proPrice': getProduct[index].get("price"),
+                                                              'proQuantity': getProduct[index].get("quantity"),
+                                                              'proCategory':
+                                                              getProduct[index].get("category"),
+                                                              'proDescription':
+                                                              getProduct[
+                                                              index]
+                                                                  .get(
+                                                                  "description"),
+                                                            });
+                                                        //productView(context, getProduct[index]);
+                                                      },
+                                                      icon: const Icon(
+                                                        Icons.edit,
+                                                        //size: ,
+                                                        color: Colors.green,
+                                                      )),
+                                                  IconButton(
+                                                      onPressed: () {
+                                                        showDialog(
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return AlertDialog(
+                                                              title: Container(
+                                                                  color: Colors
+                                                                      .blue,
+                                                                  child: const Text(
+                                                                      "Flutter Product!!")),
+                                                              content: const Text(
+                                                                  "Are You Sure Product delete ? "),
+                                                              actions: [
+                                                                ElevatedButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      Get.back();
+                                                                    },
+                                                                    child: const Text(
+                                                                        "Cancel")),
+                                                                ElevatedButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      controller.deleteProduct(
+                                                                          context,
+                                                                          getProduct[
+                                                                          index]);
+                                                                      ScaffoldMessenger.of(
+                                                                          context)
+                                                                          .showSnackBar(const SnackBar(
+                                                                          content: Text(
+                                                                            "Product delete Succesfully",
+                                                                          )));
+                                                                    },
+                                                                    child: const Text(
+                                                                        "Delete")),
+                                                              ],
+                                                            );
+                                                          },
+                                                        );
+                                                      },
+                                                      icon: const Icon(
+                                                        Icons.delete,
+                                                        color: Colors.red,
+                                                      )),
+                                                ],
+                                              ),
+                                            )
+                                                : const SizedBox(
+                                              width: 0,
+                                            ),
+                                          ],
+                                        )),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    dataList("Name : ", data["productName"]),
+                                    //dataList("Description", getProduct[index].get("description")),
+                                    dataList("Price : ", data["price"].toString()),
+                                    dataList("Category : ", data["category"]),
+                                    dataList("Qty : ", data["quantity"].toString()),
+
+                                    dataList("", ""),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
+
+
+            )
+          ;
+        }
+        //////////////////Searching Complee
+        ///////////////////
+        else if (snapshot.hasError || snapshot.data == null) {
+          return Text("something is wrong : ${snapshot.error}");}
+        else if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
             child: CircularProgressIndicator(),
           );

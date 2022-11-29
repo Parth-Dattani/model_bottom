@@ -34,6 +34,18 @@ class HomeController extends BaseController {
   Rx<int> quantity = 1.obs;
   Rx<String>   s = "".obs;
 
+  Rx<String> query = "".obs;
+  var result;
+
+  searchProduct(query, searchList) {
+    result = searchList.where((element) {
+      return element["productName"].toUpperCase().contains(query) ||
+            element["productName"].toLowerCase().contains(query) ||
+            element["productName"].toUpperCase().contains(query) &&
+            element["productName"].toLowerCase().contains(query);
+    }).toList();
+    return result;
+  }
 
   @override
   void onInit() {

@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:model_bottom/constant/constant.dart';
 import 'package:model_bottom/controller/base_controller.dart';
 import 'package:model_bottom/model/product_response.dart';
 
@@ -17,6 +18,7 @@ class ProductController extends BaseController {
   final productFormKey = GlobalKey<FormState>();
 
   List categoryList = ["mobile", "food", "wear", "laptop"];
+  List categoryImage = [ImagePath.mobileLogo, ImagePath.profileLogo, ImagePath.imageLogo, ImagePath.googleLogo];
 
   var selectedItem = "".obs;
   var category = "".obs;
@@ -48,6 +50,7 @@ class ProductController extends BaseController {
     print(Get.arguments['proImage']);
     print(Get.arguments['proName']);
     print(Get.arguments['proPrice']);
+    print(Get.arguments['proQuantity']);
     print(Get.arguments['proCategory']);
     print(Get.arguments['proDescription']);
     print("Product Id : ${productId.value}");
@@ -58,6 +61,7 @@ class ProductController extends BaseController {
     productNameController.clear();
     descController.clear();
     priceController.clear();
+    productQtyController.clear();
   }
 
   final currenUserId = FirebaseAuth.instance.currentUser!.uid;
@@ -117,8 +121,8 @@ class ProductController extends BaseController {
           .update(ProductResponse(
                   productName: productNameController.text,
                   description: descController.text,
-                  quantity: int.parse(productQtyController.text),
-                  price: int.parse(priceController.text),
+                  quantity: int.parse(productQtyController.value.text),
+                  price: int.parse(priceController.value.text),
                   category: selectedItem.value.toString(),
                   imageUrl: imageUrl.value.toString(),
                   productID: productId.value)

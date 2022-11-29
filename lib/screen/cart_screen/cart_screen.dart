@@ -71,15 +71,12 @@ class CartScreen extends GetView<CartController> {
                         return CartItem(
                           index: index,
                           productId: controller.getCartData[index]['productID'],
-                          productCategory: controller.getCartData[index]
-                              ['category'],
-                          productImage: controller.getCartData[index]
-                              ['imageUrl'],
+                          productCategory: controller.getCartData[index]['category'],
+                          productImage: controller.getCartData[index]['imageUrl'],
                           productPrice: controller.getCartData[index]['price'],
                           productQuantity: controller.quantity.value,
                           //productQuantity: controller.getCartData[index]["quantity"],
-                          productName: controller.getCartData[index]
-                              ['productName'],
+                          productName: controller.getCartData[index]['productName'],
                           //cartId: controller.getCartData[index]['cartID'],
                         );
                       },

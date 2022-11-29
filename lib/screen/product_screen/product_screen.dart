@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:model_bottom/constant/constant.dart';
 import 'package:model_bottom/constant/image_path.dart';
 import 'package:model_bottom/controller/product_controller.dart';
 
@@ -88,63 +89,43 @@ class ProductScreen extends GetView<ProductController> {
                                                 ))),
                               Positioned(
                                   bottom: 2,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      print("picked ing");
-                                      print(
-                                          controller.pickedImage.value != null);
-                                      controller.selectImage();
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(18.0),
-                                          side: const BorderSide(
-                                              color: Colors.blue)),
-                                      elevation: 5.0,
-                                      backgroundColor: Colors.blue,
-                                      textStyle:
-                                          const TextStyle(color: Colors.white),
-                                      //padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
-                                      //splashColor: Colors.grey,
-                                      minimumSize: const Size(90, 25),
+                                  child: Padding(
+                                    padding: controller.isUpload.value == true && controller.imageUrl.value.isEmpty ?  const EdgeInsets.only(left:0.0)  : const EdgeInsets.only(left: 12.0),
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        print("picked ing");
+                                        print(
+                                            controller.pickedImage.value != null);
+                                        controller.selectImage();
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(18.0),
+                                            side: const BorderSide(
+                                                color: Colors.blue)),
+                                        elevation: 5.0,
+                                        backgroundColor: Colors.blue,
+                                        textStyle:
+                                            const TextStyle(color: Colors.white),
+                                        //padding: EdgeInsets.fromLTRB(15, 15, 15, 15),
+                                        //splashColor: Colors.grey,
+                                        minimumSize:  const Size(90, 25)
+                                      ),
+                                      child: controller.isUpload.value == true &&
+                                              controller.imageUrl.value.isEmpty
+                                          ? const Text("Upload Image",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ))
+                                          : const Text("Edit Image",
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              )),
                                     ),
-                                    child: controller.isUpload.value == true &&
-                                            controller.imageUrl.value.isEmpty
-                                        ? const Text("Upload Image",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                            ))
-                                        : const Text("Edit Image",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                            )),
                                   ))
-                              /*: Positioned(
-                                      bottom: 2,
-                                      right: 20,
-                                      child: ElevatedButton(
-                                          onPressed: () {
-                                            //controller.selectImage();
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            // shape: RoundedRectangleBorder(
-                                            //     borderRadius: BorderRadius.circular(38.0),
-                                            //     side: BorderSide(color: Colors.blue)
-                                            // ),
-                                            elevation: 5.0,
-                                            backgroundColor: Colors.transparent,
-                                            textStyle: const TextStyle(
-                                                color: Colors.white),
-                                            // /minimumSize: Size(10, 5),
-                                          ),
-                                          child: IconButton(
-                                            icon: const Icon(Icons.edit),
-                                            onPressed: () {},
-                                          )),
-                                    ),*/
                             ],
                           ),
                         ),
@@ -320,20 +301,18 @@ class ProductScreen extends GetView<ProductController> {
                                 isDense: true,
                                 onChanged: (value) {
                                   controller.selectedItem.value = value!;
-                                  print(
-                                      "select${controller.selectedItem.value}");
+                                  print("select${controller.selectedItem.value}");
                                 },
                                 items: controller.categoryList.map((item) {
                                   return DropdownMenuItem(
                                       value: item.toString(),
                                       child: Row(
                                         children: [
-                                          // CircleAvatar(
-                                          //   backgroundImage:  Image.asset(ImagePath.profileLogo),
-                                          // ),
-                                          // SizedBox(
-                                          //   width: 15,
-                                          // ),
+                                          Image.asset( controller.categoryImage[3],width: 25,scale: 5,),
+
+                                          const SizedBox(
+                                            width: 15,
+                                          ),
                                           Text(
                                             item,
                                             style: const TextStyle(
@@ -347,9 +326,15 @@ class ProductScreen extends GetView<ProductController> {
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 20,
-                        ),
+                        const SizedBox(height: 4,),
+                         Align(
+                          alignment: Alignment.bottomRight,
+                            child: GestureDetector(
+                              onTap: (){
+
+                              },
+                                child: Text("add Category", style: CustomTextStyle.linkText,))),
+                        const SizedBox(height: 20,),
                         ElevatedButton(
                           onPressed: () {
                             if (controller.productFormKey.currentState!
