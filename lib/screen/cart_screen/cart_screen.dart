@@ -115,8 +115,7 @@ class CartScreen extends GetView<CartController> {
                                   arguments: {
                                     'price': controller.getCartData[1]['price'],
                                     'qty': controller.getCartData[1]['quantity'],
-                                    'total' : controller.getCartData[1]['quantity'] *
-                                        controller.getCartData[1]['price'],
+                                    'total' : controller.getCartData[1]['quantity'] * controller.getCartData[1]['price'],
                                     'subTotal' : controller.subTotal
                                   }
                                   );
