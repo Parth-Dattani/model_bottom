@@ -29,6 +29,7 @@ class HomeController extends BaseController {
       FirebaseFirestore.instance.collection('users').snapshots();
 
   RxBool isAdmin = false.obs;
+
   Rxn<bool> isAdmin2 = Rxn<bool>();
 
   Rx<int> quantity = 1.obs;
@@ -39,6 +40,9 @@ class HomeController extends BaseController {
   RxList<ProductResponse> productDataList = <ProductResponse>[].obs;
   RxList<ProductResponse> searchProductList = <ProductResponse>[].obs;
 
+
+  RxBool isFilter = true.obs;
+
   List<ProductResponse> searchProduct() {
     searchProductList.value = productDataList.where((element) {
       return element.productName!.toUpperCase().contains(query.value) ||
@@ -46,6 +50,13 @@ class HomeController extends BaseController {
     }).toList();
     return searchProductList.value;
   }
+  Rx<String> filterQuery = "".obs;
+void filterData(){
+  isFilter.value == true;
+  result =    FirebaseFirestore.instance.collection("products").snapshots;
+
+
+}
 
 
   @override

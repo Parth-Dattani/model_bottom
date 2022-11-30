@@ -66,7 +66,7 @@ static const pageID ='/CheckOutScreen';
                   SizedBox(
                     width: Get.width/2.5,
                     child: CommonTextFormField(
-                      controller: controller.cityController,
+                      controller: controller.stateController,
                       labelText: "state",
                       validator: (value){
                         if(value!.isEmpty){
@@ -157,7 +157,8 @@ SizedBox(height: 20,),
                         width: Get.width*0.5,
                         color: Colors.indigo,
                         onPressed: (){
-                          CheckOutPage();
+                          Get.toNamed(PaymentPage.pageID);
+
                         },
                         child: Text("Pay"),
                       )

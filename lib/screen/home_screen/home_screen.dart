@@ -17,8 +17,6 @@ class HomeScreen extends GetView<HomeController> {
   var getProduct;
 
 
-
-
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -77,13 +75,20 @@ class HomeScreen extends GetView<HomeController> {
                                         ),
                                       ),),
                                   ),
-                                  IconButton(onPressed: (){}, icon: Icon(Icons.thumbs_up_down_outlined))
+                                  IconButton(
+                                      onPressed: (){
+                                        controller.isFilter.value = !controller.isFilter.value;
+                                      },
+                                      icon: controller.isFilter.value ?
+                                      const Icon(Icons.arrow_upward):
+                                      const Icon(Icons.arrow_downward)
+                                  )
                                 ],
                               ),
                             ),
                           ),
 
-                       
+
                         controller.role.value == "admin"
                                   ? adminHomeScreen()
                                   : userHomeScreen(),
@@ -355,7 +360,10 @@ class HomeScreen extends GetView<HomeController> {
   //get all products
   Widget productList() {
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('products').snapshots(),
+      stream:
+      controller.isFilter.value ?
+      FirebaseFirestore.instance.collection('products').orderBy('price', descending: true).snapshots() :
+      FirebaseFirestore.instance.collection('products').orderBy('price').snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         //getProduct = snapshot.data!.docs;
         if (snapshot.hasData) {
@@ -565,6 +573,8 @@ class HomeScreen extends GetView<HomeController> {
       },
     );
   }
+
+
 
 
   Widget showProduct(List<ProductResponse> list){

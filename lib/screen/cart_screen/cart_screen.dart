@@ -25,30 +25,7 @@ class CartScreen extends GetView<CartController> {
                 onPressed: () {
                   Get.back();
                 },
-                icon: Icon(Icons.arrow_back_ios_new)),
-            actions: [
-              IconButton(
-                  onPressed: () {
-
-                    print("object:${controller.getCartData.length}");
-                    for (int i = 0; i <= controller.getCartData.length - 1; i++) {
-                      print("============================================");
-                      print("Item ${i + 1}: ");
-                      print("price:${controller.getCartData[i]['price']}");
-                      print("Qty:${controller.getCartData[i]['quantity']}");
-                      controller.total = controller.getCartData[i]['quantity'] *
-                          controller.getCartData[i]['price'];
-                      controller.subTotal += controller.total;
-                      print("total: ${controller.total}");
-                      // tot =  controller.getCartData[i]['quantity'] * controller.getCartData[i]['price'];
-                      // print(tot);
-                    }
-                    print("============================================");
-                    print("Sub Total : ${controller.subTotal}");
-                    print("============================================");
-                  },
-                  icon: Icon(Icons.check))
-            ],
+                icon: const Icon(Icons.arrow_back_ios_new)),
           ),
           body:
           // controller.getCartData == null
@@ -111,6 +88,25 @@ class CartScreen extends GetView<CartController> {
                                     height: 40,
                                     width: Get.width*0.90,
                                     onPressed: () {
+
+                                      print("object:${controller.getCartData.length}");
+                                      for (int i = 0; i <= controller.getCartData.length - 1; i++) {
+                                        print("============================================");
+                                        print("Item ${i + 1}: ");
+                                        print("price:${controller.getCartData[i]['price']}");
+                                        print("Qty:${controller.getCartData[i]['quantity']}");
+                                        controller.total = controller.getCartData[i]['quantity'] *
+                                            controller.getCartData[i]['price'];
+                                        controller.subTotal += controller.total;
+                                        print("total: ${controller.total}");
+                                        // tot =  controller.getCartData[i]['quantity'] * controller.getCartData[i]['price'];
+                                        // print(tot);
+                                      }
+                                      print("============================================");
+                                      print("Sub Total : ${controller.subTotal}");
+                                      print("============================================");
+
+
                                       Get.toNamed(CheckOutScreen.pageID,
                                           arguments: {
                                             'price': controller.getCartData[1]['price'],
@@ -119,6 +115,10 @@ class CartScreen extends GetView<CartController> {
                                             'subTotal' : controller.subTotal
                                           }
                                       );
+
+
+
+
                                     },
                                     child: Text("Check Out",style:  CustomTextStyle.buttonText)),
                               )

@@ -9,14 +9,15 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 import '../cart_screen/widget/cart_item.dart';
 import 'cart_provider.dart';
 
-class CheckOutPage extends StatefulWidget {
-  const CheckOutPage({Key? key}) : super(key: key);
+class PaymentPage extends StatefulWidget {
+  static const pageID ='/CheckOutScreen';
+  const PaymentPage({Key? key}) : super(key: key);
 
   @override
-  _CheckOutPageState createState() => _CheckOutPageState();
+  _PaymentPageState createState() => _PaymentPageState();
 }
 
-class _CheckOutPageState extends State<CheckOutPage> {
+class _PaymentPageState extends State<PaymentPage> {
   late Razorpay _razorpay;
   late double totalPrice;
 
