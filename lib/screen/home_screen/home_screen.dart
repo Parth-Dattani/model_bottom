@@ -577,7 +577,7 @@ class HomeScreen extends GetView<HomeController> {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    productView(context, list[0]);
+                    productView(context, list[index]);
                   },
                   child: Card(
                     elevation: 5,
@@ -815,15 +815,15 @@ class HomeScreen extends GetView<HomeController> {
                               .collection('cart')
                               .doc(FirebaseAuth.instance.currentUser!.uid)
                               .collection('cart_2')
-                              .doc(product.get("productID"),)
+                              .doc(product.productID,)
                               .set(ProductResponse(
-                                productName: product.get("productName"),
-                                description: product.get("description"),
+                                productName: product.productName,
+                                description: product.description,
                                 quantity: controller.quantity.value,
-                                price: product.get("price"),
-                                category: product.get("category"),
-                                imageUrl: product.get("imageUrl"),
-                                productID: product.get("productID").toString(),
+                                price: product.price,
+                                category: product.category,
+                                imageUrl: product.imageUrl,
+                                productID: product.productID.toString(),
                               ).toMap());
                           //     .then((value) {
                           //   value.set(
