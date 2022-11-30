@@ -36,16 +36,17 @@ class HomeController extends BaseController {
 
   Rx<String> query = "".obs;
   var result;
+  RxList<ProductResponse> productDataList = <ProductResponse>[].obs;
+  RxList<ProductResponse> searchProductList = <ProductResponse>[].obs;
 
-  searchProduct(query, searchList) {
-    result = searchList.where((element) {
-      return element["productName"].toUpperCase().contains(query) ||
-            element["productName"].toLowerCase().contains(query) ||
-            element["productName"].toUpperCase().contains(query) &&
-            element["productName"].toLowerCase().contains(query);
+  List<ProductResponse> searchProduct() {
+    searchProductList.value = productDataList.where((element) {
+      return element.productName!.toUpperCase().contains(query.value) ||
+            element.productName!.toLowerCase().contains(query.value);
     }).toList();
-    return result;
+    return searchProductList.value;
   }
+
 
   @override
   void onInit() {

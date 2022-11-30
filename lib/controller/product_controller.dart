@@ -114,6 +114,7 @@ class ProductController extends BaseController {
     //loader.value = true;
     productFormKey.currentState!.save();
     if (productFormKey.currentState!.validate()) {
+
       await uploadImage();
       FirebaseFirestore.instance
           .collection("products")
