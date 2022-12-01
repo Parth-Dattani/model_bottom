@@ -17,6 +17,7 @@ class RegisterController extends BaseController {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
 
+
   final registerFormKey = GlobalKey<FormState>();
 
   RxBool isObscure = true.obs;
@@ -102,4 +103,6 @@ class RegisterController extends BaseController {
         .doc(user.uid)
         .set(userModel.toMap());
   }
+
+
 }

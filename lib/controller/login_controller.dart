@@ -17,6 +17,7 @@ import '../utill/utill.dart';
 class LoginController extends BaseController {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
 
   final loginFormKey = GlobalKey<FormState>();
 
@@ -24,6 +25,9 @@ class LoginController extends BaseController {
 
   CollectionReference ref = FirebaseFirestore.instance.collection('users');
   UserModel loggedInUser = UserModel();
+
+  RxBool isForgot = false.obs;
+  RxBool isPhone = false.obs;
 
   @override
   void onInit() {
@@ -86,5 +90,11 @@ class LoginController extends BaseController {
     } on FirebaseAuthException catch (e) {
       print("Something Wrong $e");
     }
+  }
+
+  Future<void> signInwithPhone()async{
+    await auth
+        .signInWithPhoneNumber(phoneController.text);
+
   }
 }

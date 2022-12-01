@@ -5,7 +5,11 @@ import 'package:model_bottom/constant/color_config.dart';
 import 'package:model_bottom/constant/constant.dart';
 import 'package:model_bottom/controller/controller.dart';
 import 'package:model_bottom/screen/forgot_password_screen/forgot_password_screen.dart';
+import 'package:model_bottom/screen/phone_screen/phone_screen.dart';
 import 'package:model_bottom/screen/register_screen/register_screen.dart';
+
+import '../../widgets/widgets.dart';
+import 'phone.dart';
 
 class LoginScreen extends GetView<LoginController>{
   static const pageId = '/loginScreen';
@@ -64,7 +68,10 @@ class LoginScreen extends GetView<LoginController>{
               ),
               const SizedBox(height: 1),
                 TextButton(onPressed: (){
-                  Get.toNamed(ForgotPasswordScreen.pageId);
+                  Get.toNamed(ForgotPasswordScreen.pageId, arguments: {
+                    "isForgot" : controller.isForgot.value = true,
+                    "isPhone" : controller.isPhone.value = false,
+                  });
                 }, child: Align(
                   alignment: Alignment.topRight,
                   child: Text(
@@ -72,15 +79,7 @@ class LoginScreen extends GetView<LoginController>{
                     style: CustomTextStyle.linkText,
                   ),
                 ),),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.end,
-                //   children:  [
-                //     Text(
-                //       "Forgot Password",
-                //       style: CustomTextStyle.linkText,
-                //     ),
-                //   ],
-                // ),
+
               const SizedBox(height: 15,),
               ElevatedButton(onPressed: () {
 
@@ -96,8 +95,34 @@ class LoginScreen extends GetView<LoginController>{
                   Text("Don't have a account? ", style: TextStyle(color: ColorConfig.colorBlack,fontSize: 15),),
                   Text("Register", style: TextStyle(color: ColorConfig.colorLightBlue,fontSize: 18),),
                 ],
-              ))
+              )),
 
+              SizedBox(height: 20,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(width: Get.width*0.35,height: 1,color: Colors.red),
+                  const Spacer(),
+                  const Text("Sign in With",style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500),),
+                  const Spacer(),
+                  Container(width: Get.width*0.35,height: 1,color: Colors.red,)
+                ],
+              ),
+              const SizedBox(height: 20,),
+              CommonButton(color:Colors.black,
+                height: 55,
+                width: 10,
+                onPressed: (){
+                  Get.toNamed(PhoneScreen.pageId
+                  //     arguments: {
+                  //   "isForgot" : controller.isForgot.value = false,
+                  //   "isPhone" : controller.isPhone.value = true,
+                  // }
+                  );
+
+                  //controller.signInwithPhone();
+                },child: const Icon(Icons.phone_iphone, color: Colors.white,size: 30,),
+              ),
             ],
         ),
         ),

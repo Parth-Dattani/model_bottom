@@ -11,3 +11,5 @@ export 'profile_controller.dart';
 export 'cart_controller.dart';
 export 'cart_controller.dart';
 export 'forgot_password_controller.dart';
+export 'otp_controller.dart';
+export 'phone_controller.dart';

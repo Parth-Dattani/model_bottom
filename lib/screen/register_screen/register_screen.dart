@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:model_bottom/constant/color_config.dart';
 import 'package:model_bottom/controller/controller.dart';
+import 'package:model_bottom/widgets/common_button.dart';
+import 'package:model_bottom/widgets/common_text_field.dart';
 
 
 class RegisterScreen extends GetView<RegisterController> {
