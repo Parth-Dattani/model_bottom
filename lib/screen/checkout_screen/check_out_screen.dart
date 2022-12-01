@@ -11,7 +11,7 @@ import '../../widgets/widgets.dart';
 
 
 class CheckOutScreen extends GetView<CheckOutController>{
-static const pageID ='/CheckOutScreen';
+static const pageId ='/CheckOutScreen';
 
   @override
   Widget build(BuildContext context) {

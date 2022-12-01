@@ -107,7 +107,7 @@ class CartScreen extends GetView<CartController> {
                                       print("============================================");
 
 
-                                      Get.toNamed(CheckOutScreen.pageID,
+                                      Get.toNamed(CheckOutScreen.pageId,
                                           arguments: {
                                             'price': controller.getCartData[1]['price'],
                                             'qty': controller.getCartData[1]['quantity'],

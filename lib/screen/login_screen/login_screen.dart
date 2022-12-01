@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:model_bottom/constant/color_config.dart';
+import 'package:model_bottom/constant/constant.dart';
 import 'package:model_bottom/controller/controller.dart';
+import 'package:model_bottom/screen/forgot_password_screen/forgot_password_screen.dart';
 import 'package:model_bottom/screen/register_screen/register_screen.dart';
 
 class LoginScreen extends GetView<LoginController>{
@@ -12,6 +14,7 @@ class LoginScreen extends GetView<LoginController>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text("Login"),elevation: 0,),
       body: Padding(
         padding: const EdgeInsets.all(18.0),
@@ -59,6 +62,25 @@ class LoginScreen extends GetView<LoginController>{
                   return null;
                 }
               ),
+              const SizedBox(height: 1),
+                TextButton(onPressed: (){
+                  Get.toNamed(ForgotPasswordScreen.pageId);
+                }, child: Align(
+                  alignment: Alignment.topRight,
+                  child: Text(
+                    "Forgot Password",
+                    style: CustomTextStyle.linkText,
+                  ),
+                ),),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.end,
+                //   children:  [
+                //     Text(
+                //       "Forgot Password",
+                //       style: CustomTextStyle.linkText,
+                //     ),
+                //   ],
+                // ),
               const SizedBox(height: 15,),
               ElevatedButton(onPressed: () {
 

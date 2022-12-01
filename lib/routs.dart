@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:model_bottom/binding/binding.dart';
+import 'package:model_bottom/screen/forgot_password_screen/forgot_password_screen.dart';
 import 'package:model_bottom/screen/pagination_screen/pagination_screen.dart';
 import 'package:model_bottom/screen/screen.dart';
 
@@ -49,7 +50,11 @@ final List<GetPage> appPage = [
       page: () => CartScreen(),
   binding: CartBinding()),
   GetPage(
-      name: CheckOutScreen.pageID,
+      name: CheckOutScreen.pageId,
       page: () => CheckOutScreen(),
-  binding: CheckOutBindings())
+  binding: CheckOutBindings()),
+  GetPage(
+      name: ForgotPasswordScreen.pageId,
+      page: () => const ForgotPasswordScreen(),
+      binding: ForgotPasswordBinding())
 ];

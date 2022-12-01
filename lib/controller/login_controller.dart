@@ -23,26 +23,7 @@ class LoginController extends BaseController {
   final auth = FirebaseAuth.instance;
 
   CollectionReference ref = FirebaseFirestore.instance.collection('users');
-
-  //ref.doc();
-
-  // retriveData(){
-  //   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  //   User? user = auth.currentUser;
-  //   // firebaseFirestore
-  //   //     .collection("users")
-  //   //     .doc(user?.email).get(user!.uid);
-  //   //
-  //
-  //   var u = FirebaseFirestore.instance.collection('user');
-  //   var data = u.doc(u.id);
-  //   data.snapshots();
-  //
-  //   print("data: $data");
-  // }
   UserModel loggedInUser = UserModel();
-
-
 
   @override
   void onInit() {
