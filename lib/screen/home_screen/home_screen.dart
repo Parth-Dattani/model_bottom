@@ -629,8 +629,7 @@ class HomeScreen extends GetView<HomeController> {
                                                     !controller
                                                         .isFavorite.value;
                                               },
-                                              icon: controller
-                                                          .isFavorite.value ==
+                                              icon: controller.isFavorite.value ==
                                                       false
                                                   ? const Icon(Icons.favorite_border)
                                                   : const Icon(

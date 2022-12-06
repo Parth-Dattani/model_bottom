@@ -42,7 +42,7 @@ class HomeController extends BaseController {
 
 
   RxBool isFilter = true.obs;
-  RxBool isFavorite = false.obs;
+  RxBool isFavorite = true.obs;
 
   List<ProductResponse> searchProduct() {
     searchProductList.value = productDataList.where((element) {
