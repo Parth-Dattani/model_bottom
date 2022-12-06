@@ -15,8 +15,10 @@ class CommonLoader extends StatelessWidget {
             child: ModalBarrier(dismissible: false, color: Colors.grey))
             : const SizedBox(),
 
-        isLoad ? const CircularProgressIndicator(
-          valueColor: AlwaysStoppedAnimation(Colors.red),
+        isLoad ? const Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation(Colors.red),
+          ),
         ) :
             Container(),
       ],
