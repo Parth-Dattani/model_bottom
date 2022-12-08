@@ -39,19 +39,18 @@ class LoginScreen extends GetView<LoginController>{
                 decoration: InputDecoration(
                   labelText: "enter email",
                 ),
-                validator:
-                Validator.isEmail,
-              //    return null;
+                validator: Validator.isEmail
 
-                // validator: (value){
-                //   if(value!.isEmpty){
-                //     return "please enter email address";
-                //   }
-                //   else  if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
-                //     return "Please enter a valid email address";
-                //   }
-                //   return null;
-                // },
+
+                /*validator: (value){
+                  if(value!.isEmpty){
+                    return "please enter email address";
+                  }
+                  else  if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
+                    return "Please enter a valid email address";
+                  }
+                  return null;
+                },*/
               ),
               const SizedBox(height: 10,),
               TextFormField(

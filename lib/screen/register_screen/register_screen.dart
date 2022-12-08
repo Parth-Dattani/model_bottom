@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:model_bottom/constant/color_config.dart';
 import 'package:model_bottom/controller/controller.dart';
+import 'package:model_bottom/utill/utill.dart';
 import 'package:model_bottom/widgets/common_button.dart';
 import 'package:model_bottom/widgets/common_text_field.dart';
+
 
 
 class RegisterScreen extends GetView<RegisterController> {
@@ -60,12 +62,13 @@ class RegisterScreen extends GetView<RegisterController> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "please enter username";
-                    }
-                    return null;
-                  },
+                  validator: Validator.isName
+                  //     (value) {
+                  //   if (value!.isEmpty) {
+                  //     return "please enter username";
+                  //   }
+                  //   return null;
+                  // },
                 ),
                 const SizedBox(
                   height: 20,
@@ -86,14 +89,15 @@ class RegisterScreen extends GetView<RegisterController> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "please enter email address";
-                    } else if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
-                      return "Please enter a valid email address";
-                    }
-                    return null;
-                  },
+                  validator: Validator.isEmail
+                  //     (value) {
+                  //   if (value!.isEmpty) {
+                  //     return "please enter email address";
+                  //   } else if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
+                  //     return "Please enter a valid email address";
+                  //   }
+                  //   return null;
+                  // },
                 ),
                 const SizedBox(
                   height: 20,
@@ -124,14 +128,7 @@ class RegisterScreen extends GetView<RegisterController> {
                           }),
                     ),
                     obscureText: controller.isObscure.value,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "please enter password";
-                      } else if (value.length < 6) {
-                        return "password must be more than 6 letter";
-                      }
-                      return null;
-                    }),
+                    validator: Validator.isPassword,),
                 const SizedBox(
                   height: 20,
                 ),
@@ -161,17 +158,8 @@ class RegisterScreen extends GetView<RegisterController> {
                           }),
                     ),
                     obscureText: controller.isObscure2.value,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return "please enter password";
-                      } else if (value.length < 6) {
-                        return "password must be more than 6 letter";
-                      } else if (controller.passwordController.text !=
-                          controller.confirmPasswordController.text) {
-                        return "Password did not match";
-                      }
-                      return null;
-                    }),
+                    validator: Validator.isConfirmPassword
+                    ),
 
                 const SizedBox(height: 15,),
                 Row(
