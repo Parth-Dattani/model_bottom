@@ -7,6 +7,7 @@ import 'package:model_bottom/controller/controller.dart';
 import 'package:model_bottom/screen/forgot_password_screen/forgot_password_screen.dart';
 import 'package:model_bottom/screen/phone_screen/phone_screen.dart';
 import 'package:model_bottom/screen/register_screen/register_screen.dart';
+import 'package:model_bottom/utill/validator.dart';
 
 import '../../widgets/widgets.dart';
 import 'phone.dart';
@@ -38,15 +39,19 @@ class LoginScreen extends GetView<LoginController>{
                 decoration: InputDecoration(
                   labelText: "enter email",
                 ),
-                validator: (value){
-                  if(value!.isEmpty){
-                    return "please enter email address";
-                  }
-                  else  if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
-                    return "Please enter a valid email address";
-                  }
-                  return null;
-                },
+                validator:
+                Validator.isEmail,
+              //    return null;
+
+                // validator: (value){
+                //   if(value!.isEmpty){
+                //     return "please enter email address";
+                //   }
+                //   else  if (!RegExp(r'\S+@\S+\.\S+').hasMatch(value)) {
+                //     return "Please enter a valid email address";
+                //   }
+                //   return null;
+                // },
               ),
               const SizedBox(height: 10,),
               TextFormField(
@@ -56,15 +61,7 @@ class LoginScreen extends GetView<LoginController>{
                   labelText: "enter password",
                 ),
 
-                validator: (value){
-                  if(value!.isEmpty){
-                    return "please enter password";
-                  }
-                  else if(value.length < 6){
-                    return "password must be more than 6 letter";
-                  }
-                  return null;
-                }
+                validator: Validator.isPassword
               ),
               const SizedBox(height: 1),
                 TextButton(onPressed: (){
