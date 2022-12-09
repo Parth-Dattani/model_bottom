@@ -170,6 +170,43 @@ void filterData(){
     });
   }
 
+  void favorite({
+    required productId,
+    required productCategory,
+    required productRate,
+    required productOldPrice,
+    required productPrice,
+    required productImage,
+    required productFavorite,
+    required productName,
+  }){
+    FirebaseFirestore.instance
+        .collection("favorite")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("userFavorite")
+        .doc(productId)
+        .set(
+      {
+        "productId": productId,
+        "productCategory": productCategory,
+        "productRate": productRate,
+        "productOldPrice": productOldPrice,
+        "productPrice": productPrice,
+        "productImage": productImage,
+        "productFavorite": productFavorite,
+        "productName": productName,
+      },
+    );
+  }
+  deleteFavorite({required String productId}) {
+    FirebaseFirestore.instance
+        .collection("favorite")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("userFavorite")
+        .doc(productId)
+        .delete();
+  }
+
   // Future addToCart() async {
   //   await FirebaseFirestore.instance.collection("cart").add(
   //     ProductResponse(

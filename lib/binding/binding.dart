@@ -13,3 +13,4 @@ export 'check_out_bindings.dart';
 export 'forgot_password_binding.dart';
 export 'otp_binding.dart';
 export 'phone_binding.dart';
+export 'favorite_binding.dart';

@@ -34,12 +34,12 @@ void main() {
     });
   });
 
-  group("login", () {
-    testWidgets("email TextField", (WidgetTester widgetTester) async{
-      // await Firebase.initializeApp();
-     //  Get.put<LoginController>(LoginController(), permanent: false);
-       await widgetTester.pumpWidget(const LoginScreen());
-       expect(find.byType(TextFormField), findsNWidgets(2));
-    });
-  });
+  // group("login", () {
+  //   testWidgets("email TextField", (WidgetTester widgetTester) async{
+  //     // await Firebase.initializeApp();
+  //    //  Get.put<LoginController>(LoginController(), permanent: false);
+  //      await widgetTester.pumpWidget(const LoginScreen());
+  //      expect(find.byType(TextFormField), findsNWidgets(2));
+  //   });
+  // });
 }

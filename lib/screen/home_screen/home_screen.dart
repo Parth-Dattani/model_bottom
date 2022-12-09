@@ -6,6 +6,7 @@ import 'package:model_bottom/controller/controller.dart';
 import '../../constant/constant.dart';
 import '../../model/model.dart';
 import '../screen.dart';
+import 'widgets/favorite_button.dart';
 
 class HomeScreen extends GetView<HomeController> {
   static const pageId = '/HomeScreen';
@@ -621,23 +622,24 @@ class HomeScreen extends GetView<HomeController> {
                                       Positioned(
                                           right: -1,
                                           top: -15,
-                                          child: Obx(
-                                            () => IconButton(
-                                              onPressed: () {
-                                                //getProduct[index]
-                                                controller.isFavorite.value =
-                                                    !controller
-                                                        .isFavorite.value;
-                                              },
-                                              icon: controller.isFavorite.value ==
-                                                      false
-                                                  ? const Icon(Icons.favorite_border)
-                                                  : const Icon(
-                                                      Icons.favorite_sharp,
-                                                      color: Colors.pink,
-                                                    ),
-                                            ),
-                                          )),
+                                          child: FavoriteButton(
+
+                                              ifIsFavorite:(){
+                                            controller.favorite(
+                                              productId: list[index].productID,
+                                              productCategory: list[index].category,
+                                              productRate: "2",
+                                              productOldPrice: "200",
+                                              productPrice: list[index].price,
+                                              productImage: list[index].imageUrl,
+                                              productFavorite: true,
+                                              productName: list[index].productName,
+                                            );
+                                          } ,ifIsNotFavorite:(){
+                                            print("product out");
+                                            controller.deleteFavorite(
+                                                productId: list[index].productID.toString());
+                                          }  ),),
                                       controller.role.value == "admin"
                                           ? Positioned(
                                               bottom: -4,
