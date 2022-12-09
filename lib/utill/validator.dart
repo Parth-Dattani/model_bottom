@@ -55,4 +55,32 @@ class Validator{
     }
     return null;
   }
+
+  static String?  isProductName(String? pName){
+    if(pName!.isEmpty){
+      return "please enter product name";
+    }
+    return null;
+  }
+
+  static String?  isDescription(String? desc){
+    if(desc!.isEmpty){
+      return "please enter descrition";
+    }
+    return null;
+  }
+
+  static String?  isQuantity(String? qty){
+    if(qty!.isEmpty){
+      return "please enter product Quantity";
+    }
+    return null;
+  }
+
+  static String?  isPrice(String? price){
+    if(price!.isEmpty){
+      return "please enter price";
+    }
+    return null;
+  }
 }

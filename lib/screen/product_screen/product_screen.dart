@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:model_bottom/constant/constant.dart';
 import 'package:model_bottom/constant/image_path.dart';
 import 'package:model_bottom/controller/product_controller.dart';
+import 'package:model_bottom/utill/utill.dart';
 import 'package:model_bottom/widgets/common_loader.dart';
 
 class ProductScreen extends GetView<ProductController> {
@@ -15,7 +16,7 @@ class ProductScreen extends GetView<ProductController> {
   Widget build(BuildContext context) {
     return Obx(
       () =>
-          CommonLoader(child:  Scaffold(
+          CommonLoader(isLoad: controller.loader.value, child:  Scaffold(
             appBar: AppBar(
               title: Text(
                 controller.isEdit.value == true
@@ -154,12 +155,7 @@ class ProductScreen extends GetView<ProductController> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "please enter product name";
-                            }
-                            return null;
-                          },
+                          validator: Validator.isProductName
                         ),
 
                         const SizedBox(
@@ -186,12 +182,7 @@ class ProductScreen extends GetView<ProductController> {
                               borderRadius: BorderRadius.circular(20),
                             ),
                           ),
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return "please enter descrition";
-                            }
-                            return null;
-                          },
+                          validator: Validator.isDescription
                         ),
                         const SizedBox(
                           height: 20,
@@ -224,13 +215,7 @@ class ProductScreen extends GetView<ProductController> {
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                 ),
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return "please enter product Quantity";
-                                  }
-                                  return null;
-                                },
-                              ),
+                                validator: Validator.isQuantity                              ),
                             ),
                             const Spacer(),
                             SizedBox(
@@ -259,12 +244,7 @@ class ProductScreen extends GetView<ProductController> {
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                 ),
-                                validator: (value) {
-                                  if (value!.isEmpty) {
-                                    return "please enter price";
-                                  }
-                                  return null;
-                                },
+                                validator: Validator.isPrice
                               ),
                             ),
                           ],
@@ -369,8 +349,7 @@ class ProductScreen extends GetView<ProductController> {
                 ),
               ),
             ),
-          ),
-              isLoad: controller.loader.value)
+          ))
 
       //     Stack(
       //   children: [

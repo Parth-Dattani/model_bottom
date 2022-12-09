@@ -1,5 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:model_bottom/controller/login_controller.dart';
+import 'package:get/get.dart';
+import 'package:model_bottom/controller/controller.dart';
+import 'package:model_bottom/screen/login_screen/login_screen.dart';
 import 'package:model_bottom/utill/utill.dart';
 
 void main() {
@@ -27,6 +31,15 @@ void main() {
       String? result = Validator.isPassword("123456");
       expect(result, "password must be more than 6 letter");
 
+    });
+  });
+
+  group("login", () {
+    testWidgets("email TextField", (WidgetTester widgetTester) async{
+      // await Firebase.initializeApp();
+     //  Get.put<LoginController>(LoginController(), permanent: false);
+       await widgetTester.pumpWidget(const LoginScreen());
+       expect(find.byType(TextFormField), findsNWidgets(2));
     });
   });
 }

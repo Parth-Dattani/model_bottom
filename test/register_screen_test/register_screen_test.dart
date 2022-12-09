@@ -1,4 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
+import 'package:model_bottom/controller/controller.dart';
+import 'package:model_bottom/screen/login_screen/login_screen.dart';
 import 'package:model_bottom/utill/utill.dart';
 
 void main() {
@@ -49,4 +54,17 @@ void main() {
       }
     });
   });
+
+  /*group('validating form field ',(){
+    testWidgets('Show result when two inputs are given',
+            (WidgetTester tester) async {
+             await Firebase.initializeApp();
+      Get.put(LoginController());
+
+          await tester.pumpWidget(const LoginScreen());
+          await tester.enterText(find.byKey(const Key('password')), '12345');
+          // await tester.enterText(find.byKey(const Key('textfield_bottom_plus')), '6');
+          expect(find.text(''), findsOneWidget);
+        });
+  });*/
 }
