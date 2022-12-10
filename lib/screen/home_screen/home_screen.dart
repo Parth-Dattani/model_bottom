@@ -583,6 +583,24 @@ class HomeScreen extends GetView<HomeController> {
   }
 
   Widget showProduct(List<ProductResponse> list) {
+
+    // FirebaseFirestore.instance
+    //     .collection("favorite")
+    //     .doc(FirebaseAuth.instance.currentUser!.uid)
+    //     .collection("userFavorite")
+    //     .doc(ProductResponse().productID)
+    //     .get()
+    //     .then((value) => {
+    //   // if (this.mounted.)
+    //   //   {
+    //       if (value.exists)
+    //         {
+    //             controller.isFavorite.value = value.get("productFavorite"),
+    //         }
+    //     //}
+    // },
+    // );
+
     return Obx(
       () => GridView.builder(
         itemBuilder: (context, index) {
@@ -591,8 +609,10 @@ class HomeScreen extends GetView<HomeController> {
               list.isEmpty
                   ? const Text("No data")
                   : Expanded(
+
                       child: GestureDetector(
                         onTap: () {
+
                           productView(context, list[index]);
                         },
                         child: Card(
