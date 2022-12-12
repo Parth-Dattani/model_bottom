@@ -1,15 +1,27 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:model_bottom/model/model.dart';
 
 class FavoriteButton extends StatelessWidget {
   bool isFav;
+
   Function()? ifIsFavorite;
    Function()? ifIsNotFavorite;
-   FavoriteButton({Key? key,this.isFav=false,this.ifIsFavorite,this.ifIsNotFavorite}) : super(key: key);
+   FavoriteButton({
+     Key? key,
+
+     required this.isFav,
+     this.ifIsFavorite,
+     this.ifIsNotFavorite
+   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
     RxBool isFavorite=isFav.obs;
+
     return Obx(
     () {
         return IconButton(

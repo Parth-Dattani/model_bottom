@@ -14,7 +14,7 @@ class HomeController extends BaseController {
 
   CollectionReference ref = FirebaseFirestore.instance.collection('user');
   User? user = FirebaseAuth.instance.currentUser;
-
+var favData=Rx<List<String>>([]);
   Rx<String> userName = "".obs;
   Rx<String> email = "".obs;
   Rx<String> role = "".obs;
@@ -42,7 +42,7 @@ class HomeController extends BaseController {
 
 
   RxBool isFilter = true.obs;
-  RxBool isFavorite = true.obs;
+  RxBool isFavorite = false.obs;
 
   List<ProductResponse> searchProduct() {
     searchProductList.value = productDataList.where((element) {
@@ -173,12 +173,12 @@ void filterData(){
   void favorite({
     required productId,
     required productCategory,
-    required productRate,
-    required productOldPrice,
     required productPrice,
     required productImage,
     required productFavorite,
     required productName,
+    required description,
+    required quantity,
   }){
     FirebaseFirestore.instance
         .collection("favorite")
@@ -189,12 +189,12 @@ void filterData(){
       {
         "productId": productId,
         "productCategory": productCategory,
-        "productRate": productRate,
-        "productOldPrice": productOldPrice,
         "productPrice": productPrice,
         "productImage": productImage,
         "productFavorite": productFavorite,
         "productName": productName,
+        "description": description,
+        "quantity": quantity,
       },
     );
   }

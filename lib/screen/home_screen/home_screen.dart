@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:model_bottom/controller/controller.dart';
@@ -362,6 +363,15 @@ class HomeScreen extends GetView<HomeController> {
 
   //get all products
   Widget productList() {
+    FirebaseFirestore.instance
+        .collection("favorite")
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("userFavorite").get().then((value) {
+          //print(value.docs.map((e) => e['productId']).toList());
+       controller.favData.value=value.docs.map((e) => e['productId'].toString()).toList();
+      //  print("dataaaaaaa:${ controller.favData.value}");
+    }) ;
+
     return StreamBuilder<QuerySnapshot>(
       stream: controller.isFilter.value
           ? FirebaseFirestore.instance
@@ -373,18 +383,19 @@ class HomeScreen extends GetView<HomeController> {
               .orderBy('price')
               .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+
         //getProduct = snapshot.data!.docs;
         if (snapshot.hasData) {
           controller.productDataList.clear();
           for (var element in snapshot.data!.docs) {
             controller.productDataList
                 .add(ProductResponse.fromDocument(element));
-            print(element.data());
+          //  print(element.data());
           }
 
-          print("produ Listy ${controller.productDataList[0].productName}");
-          print(
-              "produ Listy length ${controller.productDataList.value.length}");
+          // print("produ Listy ${controller.productDataList[0].productName}");
+          // print(
+          //     "produ Listy length ${controller.productDataList.value.length}");
           return Padding(
             padding: const EdgeInsets.only(top: 15.0),
             child: showProduct(controller.query.value == ""
@@ -584,35 +595,58 @@ class HomeScreen extends GetView<HomeController> {
 
   Widget showProduct(List<ProductResponse> list) {
 
-    // FirebaseFirestore.instance
-    //     .collection("favorite")
-    //     .doc(FirebaseAuth.instance.currentUser!.uid)
-    //     .collection("userFavorite")
-    //     .doc(ProductResponse().productID)
-    //     .get()
-    //     .then((value) => {
-    //   // if (this.mounted.)
-    //   //   {
-    //       if (value.exists)
-    //         {
-    //             controller.isFavorite.value = value.get("productFavorite"),
-    //         }
-    //     //}
-    // },
-    // );
-
     return Obx(
       () => GridView.builder(
         itemBuilder: (context, index) {
+
+//               .doc(list[index].productID)
+//               .get()
+//               .then(
+//                 (DocumentSnapshot doc) {
+//                   controller.favData.value = doc.data() as Map<String, dynamic>;
+//                   // final data = doc.data() as Map<String, dynamic>;
+// // List<String> s = [];
+//                   print("Fav product data geting  datat: ${controller.favData
+//                       .value.containsValue("QB2lvfzaAfd9eVPVI5jQ")}");
+//                 }
+// //               print("favId from data : ${data['productId']}");
+// //               data.forEach((key, value) {
+// //                 s.add(value);
+// //               });
+// //               print("s list data : ${s[0]}" );
+// //               // ...
+// //             },
+// //             onError: (e) => print("Error getting document: $e"),
+//
+//           );
+          // var favId =
+          // FirebaseFirestore.instance
+          //     .collection("favorite")
+          //     .doc(FirebaseAuth.instance.currentUser!.uid)
+          //     .collection("userFavorite")
+          //     .doc(list[index].productID)
+          //     .get();
+          //
+          // print("Fav product data geting : $favId");
+          //     .then((value)  {
+          //        print("Fav product data geting : ${value[0]}");
+          //   // if (this.mounted)
+          //   //   {
+          //   // if (value.exists)
+          //   //   {
+          //   //     controller.isFavorite.value = value.get("productFavorite"),
+          //   //     print("df fav ${controller.isFavorite.value}"),
+          //   //   }
+          //   //}
+          // },
+          // );
           return Column(
             children: [
               list.isEmpty
                   ? const Text("No data")
                   : Expanded(
-
                       child: GestureDetector(
                         onTap: () {
-
                           productView(context, list[index]);
                         },
                         child: Card(
@@ -642,24 +676,29 @@ class HomeScreen extends GetView<HomeController> {
                                       Positioned(
                                           right: -1,
                                           top: -15,
-                                          child: FavoriteButton(
-
-                                              ifIsFavorite:(){
-                                            controller.favorite(
-                                              productId: list[index].productID,
-                                              productCategory: list[index].category,
-                                              productRate: "2",
-                                              productOldPrice: "200",
-                                              productPrice: list[index].price,
-                                              productImage: list[index].imageUrl,
-                                              productFavorite: true,
-                                              productName: list[index].productName,
-                                            );
-                                          } ,ifIsNotFavorite:(){
-                                            print("product out");
-                                            controller.deleteFavorite(
-                                                productId: list[index].productID.toString());
-                                          }  ),),
+                                          child: Obx(
+                                            () {
+                                              return FavoriteButton(
+                                                isFav: controller.favData.value.contains(list[index].productID)
+                                                    ?true
+                                                    :false,
+                                                  ifIsFavorite:(){
+                                                controller.favorite(
+                                                  productId: list[index].productID,
+                                                  productCategory: list[index].category,
+                                                  productPrice: list[index].price,
+                                                  productImage: list[index].imageUrl,
+                                                  productFavorite: true,
+                                                  productName: list[index].productName,
+                                                  description: list[index].description,
+                                                  quantity: list[index].quantity
+                                                );
+                                              } ,ifIsNotFavorite:(){
+                                                print("product out");
+                                                controller.deleteFavorite(productId: list[index].productID.toString());
+                                              }  );
+                                            }
+                                          ),),
                                       controller.role.value == "admin"
                                           ? Positioned(
                                               bottom: -4,
