@@ -6,12 +6,10 @@ import 'package:model_bottom/model/model.dart';
 
 class FavoriteButton extends StatelessWidget {
   bool isFav;
-
   Function()? ifIsFavorite;
    Function()? ifIsNotFavorite;
    FavoriteButton({
      Key? key,
-
      required this.isFav,
      this.ifIsFavorite,
      this.ifIsNotFavorite
@@ -22,14 +20,11 @@ class FavoriteButton extends StatelessWidget {
 
     RxBool isFavorite=isFav.obs;
 
-    return Obx(
-    () {
+    return Obx(() {
         return IconButton(
           onPressed: () {
             //getProduct[index]
-
-   isFavorite.value = !isFavorite.value;
-
+            isFavorite.value = !isFavorite.value;
              isFavorite.value ?
               ifIsFavorite!():ifIsNotFavorite!();
               // controller.favorite(
@@ -48,7 +43,6 @@ class FavoriteButton extends StatelessWidget {
             //   // controller.deleteFavorite(
             //   //     productId: list[index].productID.toString());
             // }
-
           },
           icon:isFavorite.value ==
               false
