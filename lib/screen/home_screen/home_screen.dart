@@ -712,8 +712,9 @@ class HomeScreen extends GetView<HomeController> {
                                                                         () {
                                                                       controller.deleteProduct(
                                                                           context,
-                                                                          getProduct[
-                                                                              index]);
+                                                                          list[index].productID
+                                                                          //getProduct[index]
+                                                                      );
                                                                       ScaffoldMessenger.of(
                                                                               context)
                                                                           .showSnackBar(const SnackBar(

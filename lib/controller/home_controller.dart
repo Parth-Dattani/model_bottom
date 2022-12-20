@@ -149,7 +149,9 @@ void filterData(){
   Future deleteProduct(context, productIndex) async {
     await FirebaseFirestore.instance
         .collection("products")
-        .doc(productIndex.get("productID"))
+        //.doc(productIndex.get("productID"))
+    //direct pass pid
+        .doc(productIndex)
         .delete();
 
     print("delete image url");
