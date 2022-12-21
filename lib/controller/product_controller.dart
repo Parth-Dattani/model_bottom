@@ -153,7 +153,7 @@ class ProductController extends BaseController {
   Future uploadImage() async {
     print("loader value sd:  ${loader.value.toString()} ");
     print("loader value sd:  ${productId.toString()} ");
-    final path = 'productImages/${productId.toString()}_${productNameController.text}';
+    final path = 'productImages/${productId.toString()}';
     //final path = 'productImages/${productNameController.value.text.trim()}${currenUserId}';
     //final path = 'productImages/${productNameController.value.text} ${DateTime.now()}';
     print(path);
