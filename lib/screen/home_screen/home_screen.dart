@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:model_bottom/controller/controller.dart';
+import 'package:uuid/uuid.dart';
 import '../../constant/constant.dart';
 import '../../model/model.dart';
 import '../screen.dart';
@@ -114,6 +115,9 @@ class HomeScreen extends GetView<HomeController> {
         floatingActionButton: controller.role.value == "admin"
             ? FloatingActionButton.small(
                 onPressed: () {
+                  // //var proID = Uuid();
+                  // var proUID = Uuid().v4();
+                  // print("pIDbhthfgh : ${proID}");
                   Get.toNamed(ProductScreen.pageId, arguments: {
                     'editProduct': controller.isEdit.value = false,
                     //deleteProduct': controller.isDelete.value = false,
@@ -658,9 +662,7 @@ class HomeScreen extends GetView<HomeController> {
                                                                           .isEdit
                                                                           .value =
                                                                       true,
-                                                              'productId': list[
-                                                                      index]
-                                                                  .productID,
+                                                              'productId': list[index].productID,
                                                               'proImage':
                                                                   list[index]
                                                                       .imageUrl,
@@ -712,7 +714,7 @@ class HomeScreen extends GetView<HomeController> {
                                                                         () {
                                                                       controller.deleteProduct(
                                                                           context,
-                                                                          list[index].productID
+                                                                          list[index]
                                                                           //getProduct[index]
                                                                       );
                                                                       ScaffoldMessenger.of(
