@@ -71,25 +71,20 @@ class ProductController extends BaseController {
     await uploadImage();
     await FirebaseFirestore.instance
         .collection("products")
-        .add(ProductResponse(
+        .doc(productId.value)
+        .set(ProductResponse(
+      productID: productId.value,
                     productName: productNameController.text,
                     description: descController.text,
                     quantity: int.parse(productQtyController.text),
                     price: int.parse(priceController.text),
                     category: selectedItem.value.toString(),
                     imageUrl: imageUrl.value.toString())
-                .toMap()
-            //  {
-            // "product_name": nameController.text,
-            // "description": descController.text,
-            // "price": priceController.text,
-            // "category": selectedItem.value.toString(),
-            // "imageUrl": imageUrl.value.toString(),}
-            )
+                .toMap())
         .then((value) {
       //uploadImage();
-      print("Added Product Value ${value.id}");
-      value.set({'productID': value.id}, SetOptions(merge: true));
+      //print("Added Product Value ${value.id}");
+      //value.set({'productID': value.id}, SetOptions(merge: true));
       showDialog(
         context: context,
         builder: (context) {
@@ -158,7 +153,7 @@ class ProductController extends BaseController {
   Future uploadImage() async {
     print("loader value sd:  ${loader.value.toString()} ");
     print("loader value sd:  ${productId.toString()} ");
-    final path = 'productImages/${productId.toString()}${currenUserId}';
+    final path = 'productImages/${productId.toString()}_${productNameController.text}';
     //final path = 'productImages/${productNameController.value.text.trim()}${currenUserId}';
     //final path = 'productImages/${productNameController.value.text} ${DateTime.now()}';
     print(path);

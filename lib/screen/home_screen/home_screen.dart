@@ -117,12 +117,12 @@ class HomeScreen extends GetView<HomeController> {
         floatingActionButton: controller.role.value == "admin"
             ? FloatingActionButton.small(
                 onPressed: () {
-                  // //var proID = Uuid();
-                  // var proUID = Uuid().v4();
-                  // print("pIDbhthfgh : ${proID}");
+                  var proUID = Uuid().v4();
+                  print("pID from random : ${proUID}");
                   Get.toNamed(ProductScreen.pageId, arguments: {
                     'editProduct': controller.isEdit.value = false,
                     //deleteProduct': controller.isDelete.value = false,
+                    'productId': proUID,
                     'proImage': '',
                     'proName': '',
                     'proPrice': '',
