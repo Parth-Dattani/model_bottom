@@ -146,15 +146,18 @@ void filterData(){
     totalUsers.value = query.count.toString();
   }
 
-  Future deleteProduct(context, productIndex) async {
+  Future deleteProduct(context,  productIndex) async {
     await FirebaseFirestore.instance
         .collection("products")
-        .doc(productIndex.get("productID"))
+        .doc(productIndex.productID)
+        //direct pass pid
+        //.doc(productIndex)
         .delete();
 
     print("delete image url");
-    print(FirebaseStorage.instance.refFromURL(productIndex.get("imageUrl")));
-    FirebaseStorage.instance.refFromURL(productIndex.get("imageUrl")).delete();
+    print(FirebaseStorage.instance.refFromURL(productIndex.imageUrl));
+    FirebaseStorage.instance.refFromURL(productIndex.imageUrl).delete();
+    //FirebaseStorage.instance.refFromURL(productIndex.get("imageUrl")).delete();
 
     Get.back();
   }
