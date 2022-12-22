@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:model_bottom/controller/base_controller.dart';
 import 'package:model_bottom/model/product_response.dart';
@@ -59,6 +61,9 @@ void filterData(){
 
 }
 
+ FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  final  flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
 
   @override
   void onInit() {
@@ -83,6 +88,9 @@ void filterData(){
       isAdmin.value = !isAdmin.value;
       isAdmin2.value = !isAdmin2.value!;
     }
+    //for fg notification
+    getToken();
+    inintMsg();
   }
 
   initList() {
@@ -208,6 +216,46 @@ void filterData(){
         .collection("userFavorite")
         .doc(productId)
         .delete();
+  }
+
+
+  void getToken() {
+    firebaseMessaging.getToken().then((value) {
+      String? token = value;
+      print(token);
+    });
+  }
+
+  void inintMsg() {
+    var  initializationSettingsAndroid = AndroidInitializationSettings('ic_notification');
+    var initializationSettingsIOS = DarwinInitializationSettings();
+    var  initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS,);
+
+    // flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    var androidNotificationDetails = const AndroidNotificationDetails(
+    'channel id',
+    'channel name',
+    importance: Importance.max,
+    priority: Priority.max,
+    playSound: true,
+    ticker: 'ticker',
+        sound: RawResourceAndroidNotificationSound("whistle")
+    );
+    var iosNotificationDetails =const DarwinNotificationDetails();
+    var notificationDetails = NotificationDetails(android: androidNotificationDetails,iOS: iosNotificationDetails);
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification!;
+      AndroidNotification androidNotification = message.notification!.android!;
+      if(notification != null && androidNotification != null){
+        flutterLocalNotificationsPlugin.show(notification.hashCode,
+            notification.title,
+            notification.body,
+             notificationDetails);
+      }
+    });
   }
 
   // Future addToCart() async {

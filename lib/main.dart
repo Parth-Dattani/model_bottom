@@ -10,6 +10,7 @@ import 'utill/shared_preferences_helper.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
+  AndroidNotification();
   print('Handling a background message ${message.messageId}');
 }
 
@@ -45,6 +46,8 @@ Future<void> main()   async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
+
 
   // This widget is the root of your application.
   @override

@@ -38,7 +38,7 @@ class NotificationService {
     const initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid,
         iOS: initializationSettingsIOS,
-        macOS: null);
+    );
 
     // void onSelect(NotificationResponse notificationResponse) {
     //   // ignore: avoid_print
@@ -151,6 +151,7 @@ class NotificationService {
         priority: Priority.max,
         playSound: true,
         ticker: 'ticker',
+          sound: RawResourceAndroidNotificationSound("whistle")
         // largeIcon: DrawableResourceAndroidBitmap('justwater'),
         // styleInformation: BigPictureStyleInformation(
         //   FilePathAndroidBitmap('justwater'),
