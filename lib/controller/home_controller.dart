@@ -88,7 +88,7 @@ void filterData(){
       isAdmin.value = !isAdmin.value;
       isAdmin2.value = !isAdmin2.value!;
     }
-    //for fg notification
+    //for get foreground notification
     getToken();
     inintMsg();
   }

@@ -5,12 +5,10 @@ import 'package:get/get.dart';
 import 'package:model_bottom/binding/binding.dart';
 import 'package:model_bottom/routs.dart';
 import 'package:model_bottom/screen/screen.dart';
-
 import 'utill/shared_preferences_helper.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  AndroidNotification();
   print('Handling a background message ${message.messageId}');
 }
 
