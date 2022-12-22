@@ -6,10 +6,14 @@ import 'package:model_bottom/binding/binding.dart';
 import 'package:model_bottom/routs.dart';
 import 'package:model_bottom/screen/screen.dart';
 import 'utill/shared_preferences_helper.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print('Handling a background message ${message.messageId}');
+  print('background message ${message.data}');
+  
+  AwesomeNotifications().createNotificationFromJsonData(message.data);
 }
 
 Future<void> main()   async {
@@ -39,8 +43,30 @@ Future<void> main()   async {
   }
 
   FirebaseMessaging.onBackgroundMessage((message) => _firebaseMessagingBackgroundHandler(message));
+
+  //awesome notification
+  AwesomeNotifications().initialize(
+    Emojis.emotion_blue_heart,
+    debug: true,
+    [
+      NotificationChannel(
+          channelKey: '101',
+          channelName: 'E-commerce',
+          channelDescription: 'Notification tests as alerts',
+          playSound: true,
+          onlyAlertOnce: true,
+          enableLights: true,
+          enableVibration: true,
+          groupAlertBehavior: GroupAlertBehavior.Children,
+          importance: NotificationImportance.High,
+          defaultPrivacy: NotificationPrivacy.Private,
+          defaultColor: Colors.red,
+          ledColor: Colors.deepPurple)
+    ],
+  );
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
