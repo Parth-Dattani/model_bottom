@@ -197,6 +197,7 @@ class LoginScreen extends GetView<LoginController> {
                           ),
                         ),
                       );
+                      //c
                       //await controller.signInwithFB();
                     },
                     child: const FaIcon(
