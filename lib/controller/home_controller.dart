@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -6,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:model_bottom/controller/base_controller.dart';
-import 'package:model_bottom/model/product_response.dart';
 import 'package:model_bottom/screen/screen.dart';
 import '../model/model.dart';
+import '../screen/notification/notification_service.dart';
 import '../utill/utill.dart';
 
 class HomeController extends BaseController {
@@ -63,7 +64,6 @@ void filterData(){
 
  FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
   final  flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
 
   @override
   void onInit() {

@@ -109,11 +109,17 @@ class CartScreen extends GetView<CartController> {
 
                                       Get.toNamed(CheckOutScreen.pageId,
                                           arguments: {
-                                            'price': controller.getCartData[1]['price'],
-                                            'qty': controller.getCartData[1]['quantity'],
-                                            'total' : controller.getCartData[1]['quantity'] * controller.getCartData[1]['price'],
+                                            'price': controller.price,
+                                            'qty': controller.quantity,
+                                            'total' : controller.total,
                                             'subTotal' : controller.subTotal
                                           }
+                                          // arguments: {
+                                          // 'price': controller.getCartData[1]['price'],
+                                          // 'qty': controller.getCartData[1]['quantity'],
+                                          // 'total' : controller.getCartData[1]['quantity'] * controller.getCartData[1]['price'],
+                                          // 'subTotal' : controller.subTotal
+                                          // }
                                       );
 
 

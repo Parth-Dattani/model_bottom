@@ -34,7 +34,7 @@ class PhoneScreen extends GetView<PhoneController>{
                     ),
                   ),
                 ),
-                maxLength: 10,
+                maxLength: 20,
                 keyboardType: TextInputType.text,
               ),
               const SizedBox(

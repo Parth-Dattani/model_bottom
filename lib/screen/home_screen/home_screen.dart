@@ -104,7 +104,6 @@ class HomeScreen extends GetView<HomeController> {
                 }
                 return Center(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: const [
                       Text("no data"),
                       CircularProgressIndicator()
@@ -191,7 +190,9 @@ class HomeScreen extends GetView<HomeController> {
 //MahmoudHesham099/
                 ],
               )),
-              Text(controller.user!.email.toString()),
+              Flexible(
+                flex: 1,
+                  child: Text(controller.user!.email.toString())),
             ],
           ),
           productList(),

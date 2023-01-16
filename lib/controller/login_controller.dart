@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_social_media_signin/flutter_social_media_signin.dart';
 import 'package:get/get.dart';
 import 'package:model_bottom/controller/base_controller.dart';
 import 'package:model_bottom/screen/home_screen/home_screen.dart';
@@ -96,5 +97,45 @@ class LoginController extends BaseController {
     await auth
         .signInWithPhoneNumber(phoneController.text);
 
+  }
+
+  Future<void> signInwithGoogle()async {
+    var googleAuth = await FlutterSocialMediaSignin().signInWithGoogle();
+    await auth
+    .signInWithCredential(googleAuth)
+    .whenComplete(() =>
+        sendDataFirestore(auth.currentUser!.displayName.toString(), auth.currentUser!.email.toString(), "user")
+    );
+    print("success");
+    print("authf ${auth}");
+    await Get.toNamed(HomeScreen.pageId);
+  }
+
+  Future<void> signInwithFB()async{
+    var fbAuth = await FlutterSocialMediaSignin().signInWithFacebook();
+    await auth
+    .signInWithCredential(fbAuth)
+    .whenComplete(() =>
+        sendDataFirestore(auth.currentUser!.displayName.toString(), auth.currentUser!.email.toString(), "user")
+    );
+    print("success");
+    print("authf ${auth}");
+    await Get.toNamed(HomeScreen.pageId);
+  }
+
+
+
+  sendDataFirestore(String userName, String email, String rool) async {
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    User? user = auth.currentUser;
+    UserModel userModel = UserModel();
+    userModel.userName = userName;
+    userModel.email = email;
+    userModel.uid = user!.uid;
+    userModel.role = rool;
+    await firebaseFirestore
+        .collection("users")
+        .doc(user.uid)
+        .set(userModel.toMap());
   }
 }

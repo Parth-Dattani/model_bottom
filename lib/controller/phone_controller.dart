@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:model_bottom/controller/base_controller.dart';
 
+import '../model/user_model.dart';
 import '../screen/home_screen/home_screen.dart';
 
 class PhoneController extends BaseController{
@@ -34,7 +36,7 @@ class PhoneController extends BaseController{
         });
       },
       verificationFailed: (FirebaseAuthException e) {
-        print(e.message);
+        print("verificationFailed : ${e.message}");
       },
       codeSent: (String verificationId, int? resendToken) {
         otpVisibility.value = true;
@@ -69,6 +71,9 @@ class PhoneController extends BaseController{
             textColor: Colors.white,
             fontSize: 16.0,
           );
+
+          sendDataFirestore(nameController.value.text, auth.currentUser!.email.toString(), "user");
+
           Get.toNamed(HomeScreen.pageId);
 
         } else {
@@ -85,4 +90,20 @@ class PhoneController extends BaseController{
       },
     );
   }
+
+  sendDataFirestore(String userName, String email, String rool) async {
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    User? user = auth.currentUser;
+    UserModel userModel = UserModel();
+    userModel.userName = userName;
+    userModel.email = email;
+    userModel.uid = user!.uid;
+    userModel.role = rool;
+    await firebaseFirestore
+        .collection("users")
+        .doc(user.uid)
+        .set(userModel.toMap());
+  }
+
+
 }
