@@ -112,28 +112,25 @@ class ProductController extends BaseController {
         Get.back();
         Get.back();
         print("Awesome Notification called...");
-       // NotificationService.awesomeNoti();
+        // NotificationService.awesomeNoti();
 
+        var addToken = <String>[];
 
-        var user = await FirebaseFirestore.instance
-            .collection('users')
-            .get();
+        //when new product add displaying i
+        var user = await FirebaseFirestore.instance.collection('users').get();
         print("user ${user.docs}");
         user.docs
             .where((element) =>
-                element.get('uid') !=
-                FirebaseAuth.instance.currentUser!.uid)
-            .map((e) => sendPushMessage(
-                'Check this product',
-                'launched product',
-                e.get('registerToken')
-        ))
+                element.get('uid') != FirebaseAuth.instance.currentUser!.uid)
+            .map((e) => addToken.add(e.get('registerToken')))
             .toList();
+        sendPushMessage(
+            productNameController.text, descController.text, addToken);
         print("dfgg");
 
         // var not = FirebaseMessaging.instance;
         // not.sendMessage();
-     /*    NotificationService.showNotification(
+        /*    NotificationService.showNotification(
           id: 0,
           title: "E-commerce",
           body: "Hello, user this for only Testing purpose.",
@@ -167,35 +164,44 @@ class ProductController extends BaseController {
     });
   }
 
-  void sendPushMessage(String body, String title, String token) async {
-    try {
-      await http.post(
-        Uri.parse('https://fcm.googleapis.com/fcm/send'),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'Authorization': 'key=AAAALJWWpsM:APA91bHX0cWCrrm-iBCc3gnCIoS-INlik21hwhJ37OC4yMhx5L_d_RYVQn9m88L0nBn0xZSk_scIkL8BS6PwP_SEGVFIPulDZgbuiH9GWup-lowR0-TCcq_-MmvWoY6O4AAT63wdz1gH',
+  void sendPushMessage(String body, String title, token) async {
+    // try {
+    await http.post(
+      Uri.parse('https://fcm.googleapis.com/fcm/send'),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization':
+            'key=AAAALJWWpsM:APA91bHX0cWCrrm-iBCc3gnCIoS-INlik21hwhJ37OC4yMhx5L_d_RYVQn9m88L0nBn0xZSk_scIkL8BS6PwP_SEGVFIPulDZgbuiH9GWup-lowR0-TCcq_-MmvWoY6O4AAT63wdz1gH',
+      },
+      // {
+      //   "registration_ids": ["device_token"],
+      //   "notification": {
+      //     "title": "FCM",
+      //     "body": "messaging tutorial"
+      //   },
+      //   "data": {
+      //     "msgId": "msg_12342"
+      //   }
+      // }
+      body: jsonEncode(<String, dynamic>{
+        "registration_ids": token,
+        'notification': <String, dynamic>{
+          'body': body,
+          'title': title,
         },
-        body: jsonEncode(
-          <String, dynamic>{
-            'topic': 'all',
-            'notification': <String, dynamic>{
-              'body': body,
-              'title': title,
-            },
-            'priority': 'high',
-            'data': <String, dynamic>{
-              'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-              'id': '1',
-              'status': 'done'
-            },
-            "to": token,
-          },
-        ),
-      );
-      print('done');
-    } catch (e) {
-      print("error push notification");
-    }
+        'priority': 'high',
+        'data': <String, dynamic>{
+          'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+          'id': '1',
+          'status': 'done'
+        }
+        // "to": token,
+      }),
+    );
+    print('done');
+    // } catch (e) {
+    //   print("error push notification");
+    // }
   }
 
   //update product

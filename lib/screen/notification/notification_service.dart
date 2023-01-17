@@ -93,7 +93,10 @@ class NotificationService {
     //Handle notification tapped logic here
   }
 
-  static awesomeNoti()async{
+  static awesomeNoti(
+      {     String? title,
+      String? body,
+} )async{
     //String time = await AwesomeNotifications().getLocalTimeZoneIdentifier();
     AwesomeNotifications().createNotification(
       content: NotificationContent(

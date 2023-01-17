@@ -79,6 +79,10 @@ void listenFCM() async {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
     if (notification != null && android != null && !kIsWeb) {
+      // NotificationService.awesomeNoti(
+      //   title: message.notification?.title,
+      //   body:  message.notification?.body,
+      // );
       NotificationService.showNotification(
         id: 0,
         title: message.notification?.title,

@@ -340,26 +340,6 @@ class ProductScreen extends GetView<ProductController> {
                           ),
                           ElevatedButton(
                             onPressed: () async {
-                              // var user = await FirebaseFirestore.instance
-                              //     .collection('users')
-                              //     .get();
-                              // print("user ${user.docs}");
-                              // user.docs
-                              //     .where((element) =>
-                              //         element.get('uid') !=
-                              //         FirebaseAuth.instance.currentUser!.uid)
-                              //     .map((e) => controller.sendPushMessage(
-                              //         'Check this product',
-                              //         'launched product',
-                              //   'cNBDRi4gSiee-UTaubIPgL:APA91bG1wWbnqtXmVxZvFMrRxG4-ZrvaSbYFxIjsyhKf2hVYont0UTOF6Ff99mxTVh4N5I4zzpc38g-ataoAPleQwZiH6y6vh51xosLHoo2hz6p3AqwbrqpUyq7Blcms1HsbaBG55C_N'
-                              // //        e.get('registerToken')
-                              // ))
-                              //     .toList();
-
-                              // controller.sendPushMessage(
-                              //     'Check this product',
-                              //     'launched product',
-                              //     'cNBDRi4gSiee-UTaubIPgL:APA91bG1wWbnqtXmVxZvFMrRxG4-ZrvaSbYFxIjsyhKf2hVYont0UTOF6Ff99mxTVh4N5I4zzpc38g-ataoAPleQwZiH6y6vh51xosLHoo2hz6p3AqwbrqpUyq7Blcms1HsbaBG55C_N');
                               if (controller.productFormKey.currentState!
                                   .validate() /* &&  controller.pickedImage.value != null*/) {
                                 if (controller.selectedItem.value.isNotEmpty) {
