@@ -1,56 +1,37 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:model_bottom/binding/binding.dart';
 import 'package:model_bottom/routs.dart';
 import 'package:model_bottom/screen/screen.dart';
+import 'screen/notification/notification_service.dart';
 import 'utill/shared_preferences_helper.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
+  // await Firebase.initializeApp();
   print('Handling a background message ${message.messageId}');
   print('background message ${message.data}');
-  
+
   AwesomeNotifications().createNotificationFromJsonData(message.data);
 }
 
-Future<void> main()   async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await sharedPreferencesHelper.getSharedPreferencesInstance();
   await Firebase.initializeApp();
-  FirebaseMessaging messaging = await FirebaseMessaging.instance;
-  NotificationSettings settings = await messaging.requestPermission(
-      sound: true,
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false
-  );
+  requestPermission();
 
-  //try this condition for when u did not receiving notification
-  if(settings.authorizationStatus == AuthorizationStatus.authorized){
-    print("Permission Granted");
-  }
-  else if(settings.authorizationStatus == AuthorizationStatus.provisional){
-    print("Permission provisional Granted");
-  }
-  else{
-    print("Permission Not Granted");
-  }
-
-  FirebaseMessaging.onBackgroundMessage((message) => _firebaseMessagingBackgroundHandler(message));
+  listenFCM();
 
   //awesome notification
   AwesomeNotifications().initialize(
-    Emojis.emotion_blue_heart,
-    debug: true,
+    null,
     [
       NotificationChannel(
-          channelKey: '101',
+          channelKey: 'E-commerce',
           channelName: 'E-commerce',
           channelDescription: 'Notification tests as alerts',
           playSound: true,
@@ -64,14 +45,67 @@ Future<void> main()   async {
           ledColor: Colors.deepPurple)
     ],
   );
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   runApp(const MyApp());
+}
+
+void requestPermission() async {
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+  await messaging.subscribeToTopic('all');
+
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    print('User granted permission');
+  } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+    print('User granted provisional permission');
+  } else {
+    print('User declined or has not accepted permission');
+  }
+}
+
+void listenFCM() async {
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+    if (notification != null && android != null && !kIsWeb) {
+      NotificationService.showNotification(
+        id: 0,
+        title: message.notification?.title,
+        body:  message.notification?.body,
+        //payload: "E-commerce",
+      );
+      // flutterLocalNotificationsPlugin.show(
+      //   notification.hashCode,
+      //   notification.title,
+      //   notification.body,
+      //   NotificationDetails(
+      //     android: AndroidNotificationDetails(
+      //       channel.id,
+      //       channel.name,
+      //       // TODO add a proper drawable resource to android, for now using
+      //       //      one that already exists in example app.
+      //       icon: 'launch_background',
+      //     ),
+      //   ),
+      // );
+    }
+  });
 }
 
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-
 
   // This widget is the root of your application.
   @override
@@ -84,9 +118,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       initialRoute: SplashScreen.pageId,
       initialBinding: SqliteDbBindings(),
-      getPages:appPage,
+      getPages: appPage,
     );
   }
 }
-
-

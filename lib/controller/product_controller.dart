@@ -1,6 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +12,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:model_bottom/constant/constant.dart';
 import 'package:model_bottom/controller/base_controller.dart';
 import 'package:model_bottom/model/product_response.dart';
+
+import '../screen/notification/notification_service.dart';
 
 class ProductController extends BaseController {
   TextEditingController productNameController = TextEditingController();
@@ -18,7 +24,12 @@ class ProductController extends BaseController {
   final productFormKey = GlobalKey<FormState>();
 
   List categoryList = ["mobile", "food", "wear", "laptop"];
-  List categoryImage = [ImagePath.mobileLogo, ImagePath.profileLogo, ImagePath.imageLogo, ImagePath.googleLogo];
+  List categoryImage = [
+    ImagePath.mobileLogo,
+    ImagePath.profileLogo,
+    ImagePath.imageLogo,
+    ImagePath.googleLogo
+  ];
 
   var selectedItem = "".obs;
   var category = "".obs;
@@ -73,14 +84,14 @@ class ProductController extends BaseController {
         .collection("products")
         .doc(productId.value)
         .set(ProductResponse(
-      productID: productId.value,
-                    productName: productNameController.text,
-                    description: descController.text,
-                    quantity: int.parse(productQtyController.text),
-                    price: int.parse(priceController.text),
-                    category: selectedItem.value.toString(),
-                    imageUrl: imageUrl.value.toString())
-                .toMap())
+                productID: productId.value,
+                productName: productNameController.text,
+                description: descController.text,
+                quantity: int.parse(productQtyController.text),
+                price: int.parse(priceController.text),
+                category: selectedItem.value.toString(),
+                imageUrl: imageUrl.value.toString())
+            .toMap())
         .then((value) {
       //uploadImage();
       //print("Added Product Value ${value.id}");
@@ -96,12 +107,95 @@ class ProductController extends BaseController {
         },
       );
       clearController();
-      Future.delayed(const Duration(seconds: 3), () {
+      Future.delayed(const Duration(seconds: 3), () async {
         //Get.offAndToNamed(HomeScreen.pageId);
         Get.back();
         Get.back();
+        print("Awesome Notification called...");
+       // NotificationService.awesomeNoti();
+
+
+        var user = await FirebaseFirestore.instance
+            .collection('users')
+            .get();
+        print("user ${user.docs}");
+        user.docs
+            .where((element) =>
+                element.get('uid') !=
+                FirebaseAuth.instance.currentUser!.uid)
+            .map((e) => sendPushMessage(
+                'Check this product',
+                'launched product',
+                e.get('registerToken')
+        ))
+            .toList();
+        print("dfgg");
+
+        // var not = FirebaseMessaging.instance;
+        // not.sendMessage();
+     /*    NotificationService.showNotification(
+          id: 0,
+          title: "E-commerce",
+          body: "Hello, user this for only Testing purpose.",
+          //payload: "E-commerce",
+        );*/
+        // AwesomeNotifications()
+        //     .createNotification(
+        //     content: NotificationContent(
+        //         id: 101,
+        //         channelKey: 'AddProduct',
+        //       title: "New Product Arrived",
+        //       body: "Hurry Up!! New Product Selling Fast",
+        //         payload: {'notificationId': '1234567890'},),
+        //         actionButtons: [
+        //           NotificationActionButton(key: 'REDIRECT', label: 'Redirect'),
+        //           NotificationActionButton(
+        //               key: 'REPLY',
+        //               label: 'Reply Message',
+        //               requireInputText: true,
+        //               actionType: ActionType.SilentAction
+        //           ),
+        //           NotificationActionButton(
+        //               key: 'DISMISS',
+        //               label: 'Dismiss',
+        //               actionType: ActionType.DismissAction,
+        //               isDangerousOption: true)
+        //         ]
+        //
+        // );
       });
     });
+  }
+
+  void sendPushMessage(String body, String title, String token) async {
+    try {
+      await http.post(
+        Uri.parse('https://fcm.googleapis.com/fcm/send'),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+          'Authorization': 'key=AAAALJWWpsM:APA91bHX0cWCrrm-iBCc3gnCIoS-INlik21hwhJ37OC4yMhx5L_d_RYVQn9m88L0nBn0xZSk_scIkL8BS6PwP_SEGVFIPulDZgbuiH9GWup-lowR0-TCcq_-MmvWoY6O4AAT63wdz1gH',
+        },
+        body: jsonEncode(
+          <String, dynamic>{
+            'topic': 'all',
+            'notification': <String, dynamic>{
+              'body': body,
+              'title': title,
+            },
+            'priority': 'high',
+            'data': <String, dynamic>{
+              'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+              'id': '1',
+              'status': 'done'
+            },
+            "to": token,
+          },
+        ),
+      );
+      print('done');
+    } catch (e) {
+      print("error push notification");
+    }
   }
 
   //update product
@@ -109,7 +203,6 @@ class ProductController extends BaseController {
     //loader.value = true;
     productFormKey.currentState!.save();
     if (productFormKey.currentState!.validate()) {
-
       await uploadImage();
       FirebaseFirestore.instance
           .collection("products")

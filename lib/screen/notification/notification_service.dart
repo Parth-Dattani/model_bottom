@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_timezone/flutter_native_timezone.dart';
 import 'package:model_bottom/constant/constant.dart';
@@ -59,21 +60,23 @@ class NotificationService {
     // void onSelectNotification(v){
     //   onNotifications.add(event);
     // }
-    await notifications.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: (payload) {
-        if (payload != null && payload.toString().isNotEmpty) {
-          onNotifications.add(payload.toString());
-          print("dfgdfg : $onNotifications");
-        }
-      },
-      //selectNotification(payload)async {}
-    );
+    // await notifications.initialize(
+    //   initializationSettings,
+    //   onDidReceiveNotificationResponse: (payload) {
+    //     if (payload != null && payload.toString().isNotEmpty) {
+    //       onNotifications.add(payload.toString());
+    //       print("dfgdfg : $onNotifications");
+    //     }
+    //   },
+    //   //selectNotification(payload)async {}
+    // );
 
     await notifications.initialize(
       initializationSettings,
       onDidReceiveNotificationResponse: (payload) async {
         onNotifications.add(payload.toString());
+        print("onNotifications value : $onNotifications");
+        print("pay load on Did Receive $payload");
       },
       //print("objectfgh $");
       // onSelectNotification: selectNotification
@@ -86,7 +89,28 @@ class NotificationService {
   }
 
   Future selectNotification(String payload) async {
+    print(payload);
     //Handle notification tapped logic here
+  }
+
+  static awesomeNoti()async{
+    //String time = await AwesomeNotifications().getLocalTimeZoneIdentifier();
+    AwesomeNotifications().createNotification(
+      content: NotificationContent(
+          id: 101,
+          channelKey: 'E-commerce',
+          //channelName: 'E-commerce',
+          title: 'New Product Arrived',
+          body: "Hurry Up!! New Product Selling Fast",
+          bigPicture: "https://media.istockphoto.com/id/1194343598/vector/bright-modern-mega-sale-banner-for-advertising-discounts-vector-template-for-design-special.jpg?s=612x612&w=0&k=20&c=oxeukxA1kVLBuLtcbipu_94blsVGs9eU0V_x70wkVzA=",
+          notificationLayout: NotificationLayout.BigPicture
+      ),
+      //      schedule: NotificationInterval(
+      //     interval: 5,
+      //     timeZone: time,
+      //     repeats: true
+      // )
+    );
   }
 
   // Local Notification

@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:model_bottom/controller/base_controller.dart';
 import 'package:model_bottom/screen/home_screen/home_screen.dart';
-import 'package:model_bottom/screen/login_screen/login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/user_model.dart';
@@ -16,7 +14,6 @@ class RegisterController extends BaseController {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
-
 
   final registerFormKey = GlobalKey<FormState>();
 
@@ -44,8 +41,6 @@ class RegisterController extends BaseController {
     }
   }
 
-
-
   //only user entry
   // Future signUp({required String userName, required String email, required String password, required String rool}) async {
   //   try {
@@ -67,8 +62,12 @@ class RegisterController extends BaseController {
     CircularProgressIndicator();
     await auth
         .createUserWithEmailAndPassword(email: email, password: password)
-        .then((value) => {sendDataFirestore(userName, email, rool)})
-        .catchError((e) {});
+        .then((value) async {
+      String? registerToken = await FirebaseMessaging.instance.getToken();
+
+      print("GEt TOKEN $registerToken");
+      sendDataFirestore(userName, email, rool, registerToken);
+    }).catchError((e) {});
     //if (res != null) {
     // if(auth != null){
     //   sharedPreferencesHelper.getSharedPreferencesInstance();
@@ -79,8 +78,11 @@ class RegisterController extends BaseController {
     if (user != null) {
       print("user ss");
       final SharedPreferences sharedPreferences =
-      await SharedPreferences.getInstance();
-      sharedPreferences.setString('email', email,);
+          await SharedPreferences.getInstance();
+      sharedPreferences.setString(
+        'email',
+        email,
+      );
       sharedPreferences.setString('password', password);
       Get.offAndToNamed(HomeScreen.pageId);
     }
@@ -90,7 +92,8 @@ class RegisterController extends BaseController {
   }
 
   //user store in firestore
-  sendDataFirestore(String userName, String email, String rool) async {
+  sendDataFirestore(
+      String userName, String email, String rool, registerToken) async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = auth.currentUser;
     UserModel userModel = UserModel();
@@ -98,11 +101,10 @@ class RegisterController extends BaseController {
     userModel.email = email;
     userModel.uid = user!.uid;
     userModel.role = rool;
+    userModel.registerToken = registerToken;
     await firebaseFirestore
         .collection("users")
         .doc(user.uid)
         .set(userModel.toMap());
   }
-
-
 }
